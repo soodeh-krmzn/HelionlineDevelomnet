@@ -1,0 +1,132 @@
+#loading {
+    position: fixed;
+    top: 0;
+    background: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+#loading span {
+    position: relative;
+    top: 40%;
+}
+img.product-image {
+    height: 150px;
+    width: 150px;
+    object-fit: contain;
+}
+.form-image-container {
+    height: 65px;
+    width: 65px;
+    position: relative;
+}
+.form-image-container .delete-image {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.form-image-container .form-image {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+.just-print {
+    display: none;
+}
+@media print {
+    body {
+        font-family: Verdana !important;
+        direction: ltr;
+        padding: 0 !important;
+        margin: 0!important;    
+    }
+    body * {
+        color: #000 !important;
+        background: #fff !important;
+    }
+    #bill-print-area * {
+        color :#000 !important;
+    }
+    #bill-print-area h3 {
+        color: #000 !important;
+        font-size: 40px !important;
+    }
+    #bill-print-area .bill-header * {
+        color: #000 !important;
+        font-size: 30px !important;
+    }
+    .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+        border: 2px solid #000!important;
+        background: #fff;
+        font-size: 40px !important;
+    }
+    a[href]:after {
+        content: none !important;
+    }
+    .m500 {
+        width: 100% !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
+    }
+    .well-lg {
+        padding: 0!important;
+    }
+    #bill-print-area {
+        width: 96% !important;
+        font-size: 60px !important;
+        border: 4px dashed #000 !important;
+        padding: 1% !important;
+        margin: auto !important;
+    }
+    #bill-print-area .customer-table {
+        width: 100%;
+        font-size: 60px !important;
+        border: 4px solid #000 !important;
+    }
+    #bill-print-area .shop-table {
+        width: 100%;
+        font-size: 60px !important;
+        border: 4px solid #000 !important;
+    }
+    #bill-print-area .checkout-table {
+        width: 100%;
+        font-size: 60px !important;
+        border: 4px solid #000 !important;
+    }
+    .no-print {
+        display: none;
+    }
+    .just-print {
+        display: block !important;
+    }
+}
+html.dark-style #bill-print-area .bill-table th {
+    color: white !important;
+}
+
+#payment-methods-table input {
+    min-width: 100px;
+}
+#smsLog-table textarea {
+    min-width: 100px;
+}
+.modal-content #menu-result label {
+    white-space: nowrap;
+}
+.menu-icon {
+    min-width: 20px;
+    text-align: center;
+}
+.dark-style #prices th {
+    color: black !important;
+}
+.dark-style text {
+    fill: #c2afaf !important;
+}
+#prices tr input,
+#prices tr select {
+    min-width: 150px;
+}
