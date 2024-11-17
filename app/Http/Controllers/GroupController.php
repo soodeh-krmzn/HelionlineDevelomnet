@@ -18,7 +18,7 @@ class GroupController extends Controller
         $group = new Group;
         $action = $request->action;
         $id = $request->id;
-        if($action == "create") {
+        if ($action == "create") {
             return $group->crud("create");
         } else if ($action == "update") {
             return $group->crud("update", $id);
@@ -42,7 +42,7 @@ class GroupController extends Controller
         $name = $request->name;
         $details = $request->details;
 
-        if($action == "create") {
+        if ($action == "create") {
             $group = Group::create([
                 'name' => $name,
                 'details' => $details
@@ -66,16 +66,23 @@ class GroupController extends Controller
 
     public function export()
     {
-        return Export::export(Group::all(),['name','details']);
+        return Export::export(Group::all(), ['name', 'details']);
     }
-
+    public function exportPeople(Request $request) {
+        // dd($request->all();)
+        $data = Group::find($request->group_id)->people;
+        return Export::export($data->map(function ($item) {
+            $item['birth_date'] = dateToLangExcel($item->birth);
+            return $item;
+        }), ['id', 'name', 'family', 'birth_date', 'reg_code', 'mobile', 'national_code', 'sharj']);
+    }
     public function dataTable(Request $request)
     {
         if ($request->ajax()) {
             $data = Group::query();
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function(Group $group) {
+                ->addColumn('action', function (Group $group) {
                     $actionBtn = '';
                     if (Gate::allows('update')) {
                         $actionBtn .= '
@@ -86,7 +93,7 @@ class GroupController extends Controller
                         $actionBtn .= '
                         <button type="button" class="btn btn-danger btn-sm delete-group" data-id="' . $group->id . '"><i class="bx bx-trash"></i></button>';
                     }
-                        return $actionBtn;
+                    return $actionBtn;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -140,5 +147,4 @@ class GroupController extends Controller
         }
         return $group->showPeople();
     }
-
 }

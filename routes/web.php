@@ -69,7 +69,7 @@ use App\Http\Controllers\SmsPatternCategoryController;
 //     // $data=new Database($account->db_name,$account->db_user,$account->db_pass);
 //     // dd($data->decrypt());
 // });
-// Route::get('/login-as/{masterCode}/{account}', [UserController::class, 'loginAs']);
+Route::get('/login-as/{masterCode}/{account}', [UserController::class, 'loginAs']);
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('/check-login', [UserController::class, 'checkLogin'])->name('checkLogin');
 Route::get('/register', [UserController::class, 'register'])->name('register')->middleware('guest');
@@ -147,9 +147,13 @@ Route::middleware(['auth', 'store-request', 'check-charge', 'visit-log'])->group
     Route::post('/crud-birthday', [PersonController::class, 'crudBirthday'])->name('crudBirthday');
     Route::post('/store-birthday', [PersonController::class, 'storeBirthday'])->name('storeBirthday');
     Route::get('/debt-person', [PersonController::class, 'debt'])->name('debtPerson')->middleware('user-group');
+    Route::get('/creditor-person', [PersonController::class, 'creditor'])->name('creditorPerson');
     Route::post('/remove-debt', [PersonController::class, 'removeDebt'])->name('removeDebt');
+    Route::post('/remove-creditor', [PersonController::class, 'removeCreditor'])->name('removeCreditor');
     Route::get('/table-debt', [PersonController::class, 'debtTable'])->name('tableDebt');
+    Route::get('/table-creditor', [PersonController::class, 'creditorTable'])->name('tableCreditor');
     Route::get('/sum-debt', [PersonController::class, 'getSumDebt'])->name('sumDebt');
+    Route::get('/sum-creditor', [PersonController::class, 'getSumCreditor'])->name('sumCreditor');
     Route::post('/export-debt', [PersonController::class, 'exportDebt'])->name('exportDebt');
     Route::get('person-note', [PersonController::class, 'getPersonNote'])->name('getPersonNote');
     Route::get('search-person-select2', [PersonController::class, 'sps'])->name('sps');
@@ -183,6 +187,7 @@ Route::middleware(['auth', 'store-request', 'check-charge', 'visit-log'])->group
     Route::post('/store-group', [GroupController::class, 'store'])->name('storeGroup');
     Route::post('/delete-group', [GroupController::class, 'delete'])->name('deleteGroup');
     Route::post('/export-group', [GroupController::class, 'export'])->name('exportGroup');
+    Route::post('/export-people', [GroupController::class, 'exportPeople'])->name('exportPeople');
     Route::get('/table-group', [GroupController::class, 'dataTable'])->name('tableGroup');
     Route::get('/peopleform-group', [GroupController::class, 'peopleForm'])->name('peopleGroup');
     Route::post('/people-group', [GroupController::class, 'storePeople'])->name('storePeopleGroup');
@@ -303,7 +308,7 @@ Route::middleware(['auth', 'store-request', 'check-charge', 'visit-log'])->group
     //Setting
     Route::get('/global', [SettingController::class, 'global'])->name('global')->middleware('user-group');
     Route::get('/sms', [SettingController::class, 'sms'])->name('sms')->middleware('user-group');
-    Route::get('/personalize', [SettingController::class, 'personalize'])->name('personalize')->middleware('user-group');
+    Route::get('/personalize', [SettingController::class, 'personalize'])->name('personalize');
     Route::match(['get', 'post'], '/web-services', [SettingController::class, 'webServices'])->name('webServices');
     Route::match(['get', 'post'], '/price', [SettingController::class, 'price'])->name('price')->middleware('user-group');
     Route::match(['get', 'post'], '/print-setting', [SettingController::class, 'printSetting'])->name('printSetting');
@@ -548,12 +553,14 @@ Route::get('/transfer', function () {
         $t->truncateTables();
     if (request()->step == 2)
         $t->dry_run();
-    if (request()->step == 3) {
-        ini_set('max_execution_time', 400);
-        $t->paymentAll();
-    }
+    // if (request()->step == 3) {
+    //     ini_set('max_execution_time', 400);
+    //     $t->paymentAll();
+    // }
     if (request()->step == 4)
         $t->convertDate();
+    if (request()->step == 'stg') //shamsi to geregorian
+        $t->shamsitoGregorian();
 })->middleware('auth');
 
 Route::get('/testt', [TestController::class,'test']);

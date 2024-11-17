@@ -23,65 +23,14 @@ class ReportController extends Controller
     {
         $fromDate=$request->from_date;
         $toDate=$request->to_date;
-        // dd($fromDate,$toDate) ;
-        // $day = $request->day;
-        // $month = $request->month;
-        // $year = $request->year;
 
-        // $date = dateSetFormat($year . '/' . $month . '/' . $day, 0, 1);
-        // $vertaDate = verta($date);
-        // // dd($vertaDate);
-        // $date = [
-        //     $date->year, $date->month, $date->day
-        // ];
-
-        //  dd($request->all(),$date, Verta::jalaliToGregorian($year, $month, $day));
-        // $total_payments = Payment::where('price', '>', 0)->whereYear('created_at', $date[0])
-        //     ->whereMonth('created_at', $date[1])
-        //     ->whereDay('created_at', $date[2])
-        //     ->get()->sum('price');
-        // $total_offered = Payment::where('type', 'offer')->whereYear('created_at', $date[0])
-        //     ->whereMonth('created_at', $date[1])
-        //     ->whereDay('created_at', $date[2])
-        //     ->sum('price');
-        // $total_offered *= -1;
-        // $total_rounded = Payment::where('type', 'rounded')->whereYear('created_at', $date[0])
-        //     ->whereMonth('created_at', $date[1])
-        //     ->whereDay('created_at', $date[2])
-        //     ->sum('price');
-        // $total_rounded *= -1;
-        // $total_vat = Payment::where('type', 'vat')->whereYear('created_at', $date[0])
-        //     ->whereMonth('created_at', $date[1])
-        //     ->whereDay('created_at', $date[2])
-        //     ->sum('price');
-        // $total_vat *= -1;
-        // $total_factors = Factor::whereYear('created_at', $date[0])
-        //     ->whereMonth('created_at', $date[1])
-        //     ->whereDay('created_at', $date[2])
-        //     ->get()->sum('final_price');
-        // $total_games = Game::whereYear('created_at', $date[0])
-        //     ->whereMonth('created_at', $date[1])
-        //     ->whereDay('created_at', $date[2])
-        //     ->get()->sum('game_price');
-        // $total_costs = Cost::whereYear('created_at', $date[0])
-        //     ->whereMonth('created_at', $date[1])
-        //     ->whereDay('created_at', $date[2])
-        //     ->get()->sum('price');
         $paymentType = new PaymentType();
         $gameController= new GameController();
         $searchData=['from_date' => $fromDate, 'to_date' => $toDate];
         $paymentTypeTable = $paymentType->showPerPaymentType($searchData);
         $section_table = $gameController->sumPerSectionView($searchData);
         $costTable=CostCategory::costTableReport($searchData);
-        //  dd($paymentTypeTable->render());
         return [
-            // 'total_payments' => cnf($total_vat + $total_rounded + $total_offered + $total_games + $total_factors),
-            // 'total_factors' => cnf($total_factors),
-            // 'total_games' => cnf($total_games),
-            // 'total_offered' => cnf($total_offered),
-            // 'total_rounded' => cnf($total_rounded),
-            // 'total_vat' => cnf($total_vat),
-            // 'total_costs' => cnf($total_costs),
             'payment_type_view' => $paymentTypeTable->render(),
             'section_table' => $section_table->render(),
             'costTable' => $costTable->render()

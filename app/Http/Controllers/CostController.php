@@ -91,17 +91,17 @@ class CostController extends Controller
             $costs->where('price', '<=', $to_price);
         }
         if ($from_date != null) {
-            $costs->where('costs.created_at', '>=', $from_date);
+            $costs->where('costs.date', '>=', $from_date);
         }
         if ($to_date != null) {
-            $costs->where('costs.created_at', '<=', $to_date);
+            $costs->where('costs.date', '<=', $to_date);
         }
         if ($category_id != null) {
             $costs->join('cost_category', 'costs.id', '=', 'cost_category.cost_id')
                     ->where('cost_category.category_id', $category_id);
         }
 
-        $costs = $costs->orderBy('costs.created_at', 'desc');
+        $costs = $costs->orderBy('costs.date', 'desc');
         return $costs;
     }
 

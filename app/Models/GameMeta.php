@@ -100,7 +100,9 @@ class GameMeta extends Main
 
     public function calcPrice($minutes = null, $pastMinutes = 0, $isolateMode = false)
     {
+        // dump('test');
         // dump('110');
+
         if ($minutes == null) {
             $time_start = new DateTime($this->start);
             $time_end = new DateTime($this->end);
@@ -110,20 +112,89 @@ class GameMeta extends Main
             $minutes += $interval->i;
         }
         $priceMinutelevel = $pastMinutes + $minutes;
+
         $section = $this->section->first();
-        $section_id = $section->id;
-        $section_name = $section->name;
-        $pr = Price::where('section_id', $section_id)
+
+        if ($section->type == 'stair') {
+            $result = $this->stairType($section, $priceMinutelevel, $minutes);
+        } else {
+            $result = $this->waterfallType($section, $priceMinutelevel, $minutes, $isolateMode);
+        }
+        if (isset($result['message'])) {
+            return $result;
+        }
+
+        return [
+            'price' => $result['price'],
+            'section_id' => $section->id,
+            'ratePrice' => $result['ratePrice'],
+            'minutes' => $minutes,
+            'entrance' => $result['entrance'],
+            'calc_type' => $result['calc_type'],
+            'isStair' => $section->type == 'stair'
+        ];
+    }
+
+    public function stairType($section, $totalMinutes, $minutes)
+    {
+        $prs = Price::where('section_id', $section->id)
+            ->where("price_type", $this->key)
+            ->where("from", "<=", $totalMinutes)->orderBy('from')->get();
+        if (count($prs) == 0) {
+            return [
+                'message' => __('messages.price_error', ['minutes' => $minutes, 'section_name' => $section->name, 'calc_type' => __($this->key)]),
+                'section_id' => $section->id
+            ];
+        }
+        $price = 0;
+        $entrance = 0;
+
+        $nop = count($prs); //=== numberOfPrices
+        $prsPastMinutes = 0;
+        $from=0;
+        foreach ($prs as $key => $pr) {
+            //check price bond
+            if (!in_array($pr->from,[$from,$from+1])){
+                return [
+                    'message' => __('messages.price_error', ['minutes' => $from, 'section_name' => $section->name, 'calc_type' => __($this->key)]),
+                    'section_id' => $section->id
+                ];
+            }
+            $from=$pr->to;
+            //end
+            if ($key == $nop - 1) {
+                if ($pr->calc_type == 'min') {
+                    $price += $pr->price * ($totalMinutes - $prsPastMinutes)*$this->value;
+                } else {
+                    $price += $pr->price*$this->value;
+                }
+            } else {
+                $minuteRange = $pr->to - $pr->from;
+                $prsPastMinutes += $minuteRange;
+                if ($pr->calc_type == 'min') {
+                    $price += $pr->price * $minuteRange*$this->value;
+                } else {
+                    $price += $pr->price*$this->value;
+                }
+            }
+            $entrance += $pr->entrance_price;
+
+        }
+
+        return ['price' => $price, 'entrance' => $entrance, 'ratePrice' => null, 'calc_type' => $pr->calc_type];
+    }
+    public function waterfallType($section, $priceMinutelevel, $minutes, $isolateMode)
+    {
+        $pr = Price::where('section_id', $section->id)
             ->where("price_type", $this->key)
             ->where("from", "<=", $priceMinutelevel)
             ->where("to", ">=", $priceMinutelevel)->first();
         if ($pr == null) {
             return [
-                'message' => __('messages.price_error', ['minutes' => $minutes, 'section_name' => $section_name, 'calc_type' => __($this->key)]), 'section_id' => $section_id
+                'message' => __('messages.price_error', ['minutes' => $minutes, 'section_name' => $section->name, 'calc_type' => __($this->key)]),
+                'section_id' => $section->id
             ];
         }
-        // dump($pr->price);
-        // dump($this->value);
         if ($pr->calc_type == "min") {
             // dump(($isolateMode ? $minutes : $priceMinutelevel),$minutes,$priceMinutelevel);
             $price = $pr->price * ($isolateMode ? $minutes : $priceMinutelevel);
@@ -133,9 +204,7 @@ class GameMeta extends Main
             $price = $pr->price;
             $price *= $this->value;
         }
-
-        // dd($this->value,$price);
         $entrance = $pr->entrance_price;
-        return ['price' => $price, 'section_id' => $section_id, 'ratePrice' => $pr->price, 'minutes' => $minutes, 'entrance' => $entrance, 'calc_type' => $pr->calc_type];
+        return ['price' => $price, 'entrance' => $entrance, 'ratePrice' => $pr->price, 'calc_type' => $pr->calc_type];
     }
 }

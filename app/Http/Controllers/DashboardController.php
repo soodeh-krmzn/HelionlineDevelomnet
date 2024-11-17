@@ -14,6 +14,7 @@ class DashboardController extends Controller
         $game = new Game;
         $columns = json_encode($this->getColumns());
         $headers = $this->getHeaders();
+
         $logInfo= $this->logInfo();
         return view('dashboard', compact('game', 'columns', 'headers','logInfo'));
     }
@@ -44,6 +45,7 @@ class DashboardController extends Controller
         $fa_columns = [
             'person_id' => __('کد عضویت'),
             'count' => __('تعداد'),
+            'group_name' => __('گروه'),
             'counter_id' => __('شمارنده'),
             'section_name' => __('بخش'),
             'station_name' => __('ایستگاه'),

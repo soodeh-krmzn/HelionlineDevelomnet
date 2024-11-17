@@ -626,6 +626,7 @@
     "_Register": null,
     "ثبت نام": "Register",
     "نام": "Name",
+    "اولویت پرداخت با کیف پول": "Preference to pay with a wallet",
     "نام خانوادگی": "Family",
     "تلفن ثابت": "Phone",
     "موبایل": "Mobile",

@@ -122,16 +122,36 @@ class Wallet extends Main
         <?php
     }
 
-    public function loadWallet($person_id)
+    public function loadWallet($person_id, &$price)
     {
+        $setting = new Setting();
+        $walletAsDefaultPay = $setting->getSetting('walletAsDefaultPay');
+        $walletAsDefaultPay =($walletAsDefaultPay!='false' and $walletAsDefaultPay!="" )?true :false;
+
         $person = Person::find($person_id);
         if ($person) {
+            $walletinput=0;
+            if ($walletAsDefaultPay) {
+                if ($person->wallet_value < $price) {
+                    $price = $price - $person->wallet_value;
+                    $walletinput = $person->wallet_value;
+                } else {
+                    $walletinput = $price;
+                    $price = 0;
+                }
+            }
         ?>
+
             <tr>
-                <th><?= __('کیف پول') ?> (<?= __('مبلغ') ?>: <?php echo cnf($person->wallet_value ?? 0) ?>)</th>
+                <th>
+                    <button type='button' class="btn btn-success btn-sm p-1 me-1 enter-default" data-target="wallet-pay">
+                        <i class="bx bx-left-arrow-circle"></i>
+                    </button>
+                    <?= __('کیف پول') ?> (<?= __('مبلغ') ?>: <?php echo cnf($person->wallet_value ?? 0) ?>)
+                </th>
                 <td>
-                    <input type="text" data-id="wallet-pay" class="form-control just-numbers money-filter" max="<?php echo $person->wallet_value ?? 0 ?>" placeholder="مبلغ کیف پول...">
-                    <input type="hidden" name="wallet" id="wallet-pay" class="form-control just-numbers payment-price" max="<?php echo $person->wallet_value ?? 0 ?>">
+                    <input type="text" data-id="wallet-pay" value="<?= cnf($walletinput) ?>" class=" form-control just-numbers money-filter" max="<?php echo $person->wallet_value ?? 0 ?>" placeholder="مبلغ کیف پول...">
+                    <input type="hidden" name="wallet" value="<?= $walletinput ?>" id="wallet-pay" class=" form-control just-numbers payment-price" max="<?php echo $person->wallet_value ?? 0 ?>">
                 </td>
                 <td>
                     <input type="text" name="wallet" id="wallet-details" class="form-control payment-details" placeholder="توضیحات...">

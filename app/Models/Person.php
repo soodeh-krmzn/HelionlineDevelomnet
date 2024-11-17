@@ -63,7 +63,9 @@ class Person extends Main
     {
         return persianTime($this->birth);
     }
-
+    public function groupNames(){
+        return $this->belongsToMany(Group::class,'group_person', 'group_id','person_id')->pluck('name')->implode(' - ');
+    }
     public function getBalance()
     {
         if ($this->balance > 0) {

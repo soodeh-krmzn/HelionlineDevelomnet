@@ -21,18 +21,18 @@ class PaymentType extends Main
     public function status()
     {
         if ($this->status == 0) {
-            return '<span class="badge bg-danger">'.__('غیرفعال').'</span>';
+            return '<span class="badge bg-danger">' . __('غیرفعال') . '</span>';
         } else {
-            return '<span class="badge bg-success">'.__('فعال').'</span>';
+            return '<span class="badge bg-success">' . __('فعال') . '</span>';
         }
     }
 
     public function club()
     {
         if ($this->club == 0) {
-            return '<span class="badge bg-danger">'.__('خیر').'</span>';
+            return '<span class="badge bg-danger">' . __('خیر') . '</span>';
         } else {
-            return '<span class="badge bg-success">'.__('بله').'</span>';
+            return '<span class="badge bg-success">' . __('بله') . '</span>';
         }
     }
 
@@ -64,8 +64,8 @@ class PaymentType extends Main
             "vat",
             'rounded',
             'deposit'
-        ])->select('type',DB::raw("SUM(price) as price"))->groupBy('type');
-        $payments=$payments->get();
+        ])->select('type', DB::raw("SUM(price) as price"))->groupBy('type');
+        $payments = $payments->get();
         //  dd($data,$request->all());
         return view('report.sections.showPerPaymentType', compact('payments'));
     }
@@ -78,11 +78,11 @@ class PaymentType extends Main
             <table class="table table-hover border-top">
                 <thead>
                     <tr>
-                        <th><?=__('ردیف')?></th>
+                        <th><?= __('ردیف') ?></th>
                         <th>نام</th>
                         <th>برچسب</th>
-                        <th><?=__('توضیحات')?></th>
-                        <th><?=__('وضعیت')?></th>
+                        <th><?= __('توضیحات') ?></th>
+                        <th><?= __('وضعیت') ?></th>
                         <th>مدیریت</th>
                     </tr>
                 </thead>
@@ -113,7 +113,7 @@ class PaymentType extends Main
         } else { ?>
             <div class="row">
                 <div class="col-12">
-                    <div class="alert alert-danger text-center m-0"><?=__('موردی جهت نمایش موجود نیست.')?></div>
+                    <div class="alert alert-danger text-center m-0"><?= __('موردی جهت نمایش موجود نیست.') ?></div>
                 </div>
             </div>
         <?php
@@ -146,51 +146,51 @@ class PaymentType extends Main
             </div>
             <div class="row mb-4">
                 <div class="col-md-6 form-group">
-                    <label class="form-label required"><?=__('نام')?> <span class="text-danger">*</span></label>
-                    <input type="text" name="name" id="name" data-id="name" class="form-control checkEmpty" placeholder="<?=__('نام')?>..." value="<?php echo $name; ?>">
+                    <label class="form-label required"><?= __('نام') ?> <span class="text-danger">*</span></label>
+                    <input type="text" name="name" id="name" data-id="name" class="form-control checkEmpty" placeholder="<?= __('نام') ?>..." value="<?php echo $name; ?>">
                     <div class="invalid-feedback" data-id="name" data-error="checkEmpty"></div>
                 </div>
                 <div class="col-md-6 form-group">
-                    <label class="form-label required"><?=__('برچسب')?> <span class="text-danger">*</span></label>
-                    <input type="text" name="label" id="label" data-id="label" class="form-control checkEmpty" placeholder="<?=__('برچسب')?>..." value="<?php echo $label; ?>">
+                    <label class="form-label required"><?= __('برچسب') ?> <span class="text-danger">*</span></label>
+                    <input type="text" name="label" id="label" data-id="label" class="form-control checkEmpty" placeholder="<?= __('برچسب') ?>..." value="<?php echo $label; ?>">
                     <div class="invalid-feedback" data-id="label" data-error="checkEmpty"></div>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="col-md-6 form-group">
-                    <label class="form-label required"><?=__('وضعیت')?><span class="text-danger">*</span></label>
+                    <label class="form-label required"><?= __('وضعیت') ?><span class="text-danger">*</span></label>
                     <select name="status" id="status" class="form-select">
-                        <option value="1" <?php echo $status == 1 ? "selected" : "" ?>><?=__('فعال')?></option>
-                        <option value="0" <?php echo $status == 0 ? "selected" : "" ?>><?=__('غیرفعال')?></option>
+                        <option value="1" <?php echo $status == 1 ? "selected" : "" ?>><?= __('فعال') ?></option>
+                        <option value="0" <?php echo $status == 0 ? "selected" : "" ?>><?= __('غیرفعال') ?></option>
                     </select>
                 </div>
                 <div class="col-md-6 form-group">
-                    <label class="form-label required"><?=__('مشمول امتیاز باشگاه')?> <span class="text-danger">*</span></label>
+                    <label class="form-label required"><?= __('مشمول امتیاز باشگاه') ?> <span class="text-danger">*</span></label>
                     <select name="club" id="club" class="form-select">
-                        <option value="1" <?php echo $club == 1 ? "selected" : "" ?>><?=__('فعال')?></option>
-                        <option value="0" <?php echo $club == 0 ? "selected" : "" ?>><?=__('غیرفعال')?></option>
+                        <option value="1" <?php echo $club == 1 ? "selected" : "" ?>><?= __('فعال') ?></option>
+                        <option value="0" <?php echo $club == 0 ? "selected" : "" ?>><?= __('غیرفعال') ?></option>
                     </select>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="col-md-12 form-group">
-                    <label class="form-label required"><?=__('توضیحات')?></label>
-                    <input type="text" name="details" id="details" class="form-control" placeholder="<?=__('توضیحات')?>..." value="<?php echo $details; ?>">
+                    <label class="form-label required"><?= __('توضیحات') ?></label>
+                    <input type="text" name="details" id="details" class="form-control" placeholder="<?= __('توضیحات') ?>..." value="<?php echo $details; ?>">
                 </div>
             </div>
             <div class="row">
                 <div class="col-12 text-center">
                     <?php
                     if ($action == "create") { ?>
-                        <button type="button" id="store-payment-type" data-action="create" data-id="0" class="btn btn-success me-sm-3 me-1 submit-by-enter"><?=__('ثبت اطلاعات')?></button>
+                        <button type="button" id="store-payment-type" data-action="create" data-id="0" class="btn btn-success me-sm-3 me-1 submit-by-enter"><?= __('ثبت اطلاعات') ?></button>
                     <?php
                     } else {
                     ?>
                         <input type="hidden" name="id" id="id" value="<?php echo $id; ?>">
-                        <button type="button" id="store-payment-type" data-action="update" data-id="<?php echo $id; ?>" class="btn btn-warning me-sm-3 me-1 submit-by-enter"><?=__('ویرایش اطلاعات')?></button>
+                        <button type="button" id="store-payment-type" data-action="update" data-id="<?php echo $id; ?>" class="btn btn-warning me-sm-3 me-1 submit-by-enter"><?= __('ویرایش اطلاعات') ?></button>
                     <?php
                     } ?>
-                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close"><?=__('انصراف')?></button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close"><?= __('انصراف') ?></button>
                 </div>
             </div>
         </div>
@@ -207,12 +207,12 @@ class PaymentType extends Main
     {
         $setting = new Setting;
     ?>
-        <label class="form-label"><?=__('روش پرداخت پیشفرض')?></label>
+        <label class="form-label"><?= __('روش پرداخت پیشفرض') ?></label>
         <?php
         if ($this->getSelect()->count() > 0) {
         ?>
             <select name="default_payment_type" class="form-select setting">
-                <option value=""><?=__('هیچکدام')?></option>
+                <option value=""><?= __('هیچکدام') ?></option>
                 <?php
                 foreach ($this->getSelect() as $paymentTypeRow) {
                 ?>
@@ -224,7 +224,7 @@ class PaymentType extends Main
         <?php
         } else {
         ?>
-            <span class="badge bg-danger"><?=__('بدون روش پرداخت')?></span>
+            <span class="badge bg-danger"><?= __('بدون روش پرداخت') ?></span>
         <?php
         }
     }
@@ -239,22 +239,28 @@ class PaymentType extends Main
         ?>
         <div class="table-responsive">
             <table id="payment-methods-table" class="payment-methods-table mt-4 table no-print">
+            <input type="hidden" id="defaultPrice" value="<?= $payment ?>">
                 <tbody>
                     <?php
                     if ($show_wallet == true && $person?->wallet_value > 0) {
-                        $wallet->loadWallet($person_id);
+                        $wallet->loadWallet($person_id,$payment);
                     }
                     if ($payment_types->count() > 0) {
                         foreach ($payment_types as $payment_type) {
                     ?>
                             <tr>
-                                <th><?php echo $payment_type->label ?></th>
+                                <th>
+                                    <button type="button" class="btn btn-success btn-sm p-1 me-1 enter-default" data-target="<?php echo $payment_type->name ?>-pay">
+                                        <i class="bx bx-left-arrow-circle"></i>
+                                    </button>
+                                    <?php echo $payment_type->label ?>
+                                </th>
                                 <td>
-                                    <input type="text" data-id="<?php echo $payment_type->name ?>-pay" class="form-control just-numbers money-filter payment-input" placeholder="<?=__('مبلغ')?> <?php echo $payment_type->label ?>..." value="<?php echo $payment_type->name == $default ? cnf($payment) : '' ?>">
-                                    <input type="hidden" name="<?php echo $payment_type->name ?>" id="<?php echo $payment_type->name ?>-pay" class="form-control just-numbers payment-price" value="<?php echo $payment_type->name == $default ? $payment : '' ?>">
+                                    <input type="text" data-id="<?php echo $payment_type->name ?>-pay" class="<?php echo $payment_type->name == $default?"default-payment-input":'' ?> form-control just-numbers money-filter payment-input" placeholder="<?= __('مبلغ') ?> <?php echo $payment_type->label ?>..." value="<?php echo $payment_type->name == $default ? cnf($payment) : '' ?>">
+                                    <input type="hidden" name="<?php echo $payment_type->name ?>" id="<?php echo $payment_type->name ?>-pay" class="<?php echo $payment_type->name == $default?"default-payment-price":'' ?> type-price form-control just-numbers payment-price" value="<?php echo $payment_type->name == $default ? $payment : '' ?>">
                                 </td>
                                 <td>
-                                    <input type="text" name="<?php echo $payment_type->name ?>" value="<?= $debt && $payment_type->name == $default ? __('messages.payment_default_description',['person_id'=>$debt['person_id'],'person_name'=>$debt['person_name']]) : '' ?>" id="<?php echo $payment_type->name ?>-details" class="form-control payment-details" placeholder="<?=__('توضیحات')?>...">
+                                    <input type="text" name="<?php echo $payment_type->name ?>" value="<?= $debt && $payment_type->name == $default ? __('messages.payment_default_description', ['person_id' => $debt['person_id'], 'person_name' => $debt['person_name']]) : '' ?>" id="<?php echo $payment_type->name ?>-details" class="form-control payment-details" placeholder="<?= __('توضیحات') ?>...">
                                 </td>
                             </tr>
                         <?php
@@ -293,17 +299,17 @@ class PaymentType extends Main
                     // }
                     ?>
                     <tr>
-                        <th><?=__('مبلغ')?></th>
+                        <th><?= __('مبلغ') ?></th>
                         <td>
-                            <input type="text" data-id="edit-pay" class="form-control just-numbers money-filter payment-input" placeholder="<?=__('مبلغ')?>..." value="<?= cnf($payment?->price) ?>">
+                            <input type="text" data-id="edit-pay" class="form-control just-numbers money-filter payment-input" placeholder="<?= __('مبلغ') ?>..." value="<?= cnf($payment?->price) ?>">
                             <input type="hidden" name="price" id="edit-pay" class="form-control just-numbers payment-price" value="<?php echo $payment?->price ?>">
                         </td>
                         <td>
-                            <input type="text" name="details" value="<?= $payment->details ?>" class="form-control payment-details" placeholder="<?=__('توضیحات')?>...">
+                            <input type="text" name="details" value="<?= $payment->details ?>" class="form-control payment-details" placeholder="<?= __('توضیحات') ?>...">
                         </td>
                     </tr>
                     <tr>
-                        <th><?=__('نوع سند')?></th>
+                        <th><?= __('نوع سند') ?></th>
                         <td colspan="5">
                             <select id="doctype" class="form-select">
                                 <option <?= $payment?->price >= 0 ? 'selected' : '' ?> value="+"><?= __('سند مثبت') ?></option>
@@ -319,11 +325,11 @@ class PaymentType extends Main
 
                             <tr>
                                 <th>
-                                    <label for="" class="mb"> <?=__('روش پرداخت')?></label>
+                                    <label for="" class="mb"> <?= __('روش پرداخت') ?></label>
                                 </th>
                                 <th colspan="5">
                                     <select id="paymentTypeSelect" class="form-select">
-                                        <option value=""><?=__('انتخاب کنید')?>...</option>
+                                        <option value=""><?= __('انتخاب کنید') ?>...</option>
                                         <?php
                                         foreach ($payment_types as $payment_type) { ?>
                                             <option <?= $payment?->type == $payment_type->name ? 'selected' : '' ?> value="<?= $payment_type->name ?>"><?= $payment_type->name ?></option>
@@ -341,7 +347,7 @@ class PaymentType extends Main
                     <?php } ?>
                     <tr>
                         <th colspan="5">
-                            <?=__('جمع پرداختی')?>:
+                            <?= __('جمع پرداختی') ?>:
                             <span id="total-pay"><?= cnf($payment?->price) ?></span>
                         </th>
                     </tr>

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('created_by')->comment('کاربر ایجاد');
             $table->double('price')->comment('مبلغ');
             $table->text('details')->nullable()->comment('توضیحات');
+            $table->timestamp('date')->comment('تاریخ اعمال');
             $table->softDeletes();
             $table->timestamps();
         });

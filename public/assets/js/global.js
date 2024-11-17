@@ -202,11 +202,11 @@ function addCommas(nStr) {
 
 function totalPayment() {
     var sum = 0;
-    $('.payment-price').each(function () {
+    $('.type-price').each(function () {
         sum += Number($(this).val());
     });
 
-    var number_format = addCommas(sum);
+    var number_format = cnf(sum);
 
     $("#total-pay").html(number_format);
 }

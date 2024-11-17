@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Price;
+use App\Models\Section;
 use Illuminate\Http\Request;
 
 class PriceController extends Controller
@@ -12,7 +13,9 @@ class PriceController extends Controller
     {
         $price = new Price;
         $section_id = $request->id;
-        return $price->priceTable($section_id);
+        $section=Section::select('id', 'type')->find($section_id);
+        $formView=$price->priceTable($section_id);
+        return ["form"=> $formView->render(),'section'=>$section];
     }
 
     public function storePrice(Request $request)

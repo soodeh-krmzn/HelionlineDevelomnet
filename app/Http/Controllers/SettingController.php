@@ -110,6 +110,13 @@ class SettingController extends Controller
 
     public function price(Request $request)
     {
+        if ($request->target=='change-type') {
+            $section=Section::find($request->id)->update([
+                'type'=>$request->type
+            ]);
+            // dd(Section::find($request->id));
+            return true;
+        }
         if ($request->has('roundStatus')) {
             // dd($request->all());
             Setting::updateOrCreate([

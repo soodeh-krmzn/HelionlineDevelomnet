@@ -59,7 +59,7 @@ class Game extends Main
     {
         return $this->belongsTo(Section::class);
     }
-
+   
     public function payments()
     {
         return $this->morphMany(Payment::class, 'object');
@@ -672,6 +672,7 @@ class Game extends Main
     {
         $meta = new GameMeta;
         $setGloabal = $meta->showIndex2($g_id);
+
         $setting = new Setting;
         $game = Game::find($g_id);
         $person = $game->person;
@@ -680,7 +681,6 @@ class Game extends Main
                 'offer_code' => $offerCode
             ]);
         }
-
         if (!$person) {
             return response()->json([
                 'message' => 'شخص یافت نشد.'
@@ -859,7 +859,7 @@ class Game extends Main
                         </div>
                     <?php
                     }
-                    if ($game->factor?->total_price) { ?>
+                    if ($game->factor) { ?>
                         <div id="g-factor-result" class="mt-1">
                             <?php $game->factor?->showBodies("load-game"); ?>
                         </div>

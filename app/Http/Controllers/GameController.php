@@ -27,6 +27,7 @@ use App\Models\CounterItem;
 use App\Models\PaymentType;
 use Illuminate\Http\Request;
 use Hekmatinasser\Verta\Verta;
+use Illuminate\Validation\Rule;
 use App\Models\Admin\SmsPattern;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -80,7 +81,7 @@ class GameController extends Controller
 
         $charges = $this->chargePackage($request);
         $courses = $this->coursePayments($request);
-        return view('report.sections.showPerSection', compact('data', 'factors', 'charges','courses'));
+        return view('report.sections.showPerSection', compact('data', 'factors', 'charges', 'courses'));
     }
 
     public function chargePackage(Request $request)
@@ -153,7 +154,7 @@ class GameController extends Controller
             }
             if ($person->sharj_type == 'times' && $person->isNotExpired() && $request->count > $person->sharj) {
                 return response()->json([
-                    'message' => __("تعداد افراد وارد شده بیش از مرتبه شارژ موجود است.") . PHP_EOL . __("messages.chargeTimes",['times'=>$person->sharj])
+                    'message' => __("تعداد افراد وارد شده بیش از مرتبه شارژ موجود است.") . PHP_EOL . __("messages.chargeTimes", ['times' => $person->sharj])
                 ], 400);
             }
             $section = Section::find($request->section_id);
@@ -231,7 +232,7 @@ class GameController extends Controller
             $sms = new SMS();
             $sms->send_sms('ورود مشتری', $person->mobile, [
                 'name' => $person->name,
-                'login' => $game->in_time,
+                'login' =>  timeFormat($game->in_time, 1)->format('H:i'),
                 'camera_link' => $setting->getSetting('camera_link')
             ]);
         } catch (\Exception $e) {
@@ -293,9 +294,13 @@ class GameController extends Controller
         $validated = $request->validate([
             'person_name' => 'required',
             'person_family' => 'required',
-            'person_mobile' => "required|numeric|digits:$mobileCount" . (($request->person_id == 0 and $repetitiveMobile != 'true') ? "|unique:people,mobile" : ''),
+            'person_mobile' => ['required', 'digits:' . $mobileCount, $repetitiveMobile != 'true' ?  Rule::unique('people', 'mobile')->ignore($person_id)->where(function ($query) {
+                return $query->whereNull('deleted_at');
+            }) : ''],
             'person_gender' => 'required',
-            'person_national_code' => 'nullable|numeric|unique:people,national_code,' . $request->person_id,
+            'person_national_code' => ['nullable', Rule::unique('people', 'national_code')->ignore($person_id)->where(function ($query) {
+                return $query->whereNull('deleted_at'); // Exclude soft-deleted records
+            })]
         ]);
 
         if ($request->person_birth != "") {
@@ -482,7 +487,7 @@ class GameController extends Controller
             ]);
             $balance += $game->deposit;
         }
-        if ($prices["factor_price"] > 0) {
+        if ($game->factor) {
             Payment::create([
                 "user_id" => auth()->id(),
                 "person_id" => $game->person_id,
@@ -531,8 +536,8 @@ class GameController extends Controller
             $sms = new SMS();
             $sms->send_sms('خروج مشتری', $person->mobile, [
                 'name' => $person->name,
-                'login' => $game->in_time,
-                'logout' => $game->out_time,
+                'login' => timeFormat($game->in_time, 1)->format('H:i'),
+                'logout' => timeFormat($game->out_time, 1)->format('H:i'),
                 'shop' => $prices['factor_price'],
                 'price' => $game->final_price
             ]);
@@ -542,7 +547,8 @@ class GameController extends Controller
             $sms = new SMS();
             $sms->send_sms('باشگاه مشتریان', $person->mobile, [
                 'name' => $person->name,
-                'price'=>cnf($calculateClub['sum'])
+                'price' => cnf($calculateClub['sum']),
+                'wallet_value' => cnf($person->wallet_value)
             ]);
         }
         if ($request->no_feedback_message == "false") {
@@ -659,7 +665,7 @@ class GameController extends Controller
         if ($request->trashed == "true") {
             $games = Game::onlyTrashed();
         } else {
-            $games = Game::query();
+            $games = Game::where('status', 1);
         }
 
         if ($person_id != null) {
@@ -728,14 +734,14 @@ class GameController extends Controller
                 $data = $this->searchReport($request);
             } elseif ($request->all == true) {
                 // dd($request->all());
-                $data = Game::query();
+                $data = Game::where('status', 1);
             } else {
-                $data = Game::whereDate('out_date', today());
+                $data = Game::where('status', 1)->whereDate('out_date', today());
             }
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('person', function (Game $game) {
-                    return $game->person?->getFullName() ?? '<span class="badge bg-danger">'.__("یافت نشد").'</span>';
+                    return $game->person?->getFullName() ?? '<span class="badge bg-danger">' . __("یافت نشد") . '</span>';
                 })
                 ->editColumn('section_name', function (Game $game) {
                     return $game->section?->name;
@@ -869,7 +875,7 @@ class GameController extends Controller
                 'message' => "یافت نشد."
             ], 404);
         }
-        Payment::where('object_type','App\Models\Game')->where('object_id', $game->id)->delete();
+        Payment::where('object_type', 'App\Models\Game')->where('object_id', $game->id)->delete();
         $game->delete();
 
         // $games = Game::all();
@@ -893,34 +899,38 @@ class GameController extends Controller
         if ($request->has('filter_search')) {
             $data = $this->searchReport($request)->get();
         } elseif ($request->all == true) {
-            $data = Game::latest()->get();
+            $data = Game::where('status', 1)->latest()->get();
         } else {
-            $data = Game::whereDate('out_date', today())->latest()->get();
+            $data = Game::where('status', 1)->whereDate('out_date', today())->latest()->get();
         }
-        if($final_price==false){
+        if ($final_price == false) {
             return $data->sum('game_price');
         }
         if ($data->count() <= 0) {
             return [
-                'sumPrice'=>0,
-                'sumHours'=>0
+                'sumPrice' => 0,
+                'sumHours' => 0
             ];
         }
-        $min=0;
-        foreach($data as $row)  {
-            $start=Carbon::create($row->in_date.' '.$row->in_time);
-            $end=Carbon::create($row->out_date .' '.$row->out_time);
-            // dump($row->in_date.' '.$row->in_time,$end,$row->out_date .' '.$row->out_time);
-            $min+=$start->diffInMinutes($end);
+        $min = 0;
+        $sumNormal = 0;
+        $sumVip = 0;
+        $sumExtra = 0;
+        foreach ($data as $row) {
+
+            $min += ($row->total + $row->total_vip + $row->extra);
+            $sumNormal += $row->total;
+            $sumVip += $row->total_vip;
+            $sumExtra += $row->extra;
         }
+        return [
+            'sumPrice' => $data->sum('final_price'),
+            'sumHours' => formatDurationStr($min),
+            'sumExtra'=>formatDurationStr($sumExtra),
+            'sumVip'=>formatDurationStr($sumVip),
+            'sumNormal'=>formatDurationStr($sumNormal),
 
-
-            return [
-                'sumPrice'=>$data->sum('final_price'),
-                'sumHours'=>formatDurationStr($min)
-            ];
-
-
+        ];
     }
 
     public function indexTable(Request $request)
@@ -943,8 +953,14 @@ class GameController extends Controller
                 ->editColumn('counter_id', function (Game $game) {
                     return $game->getCounter();
                 })
+                ->editColumn('group_name', function (Game $game) {
+
+                    //  $res=$game->person->groupNames();
+                    $res = $game->person->groupNames();
+                    return $res ? $res : '-';
+                })
                 ->editColumn('station_name', function (Game $game) {
-                    return $game->station_name ?? '<span class="badge bg-danger">'.__('هیچکدام').'</span>';
+                    return $game->station_name ?? '<span class="badge bg-danger">' . __('هیچکدام') . '</span>';
                 })
                 ->addColumn('action', function (Game $game) {
                     $setting = new Setting;

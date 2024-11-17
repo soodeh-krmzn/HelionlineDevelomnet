@@ -184,6 +184,23 @@ class PersonController extends Controller
             $day = str_pad(getDay(), 2, "0", STR_PAD_LEFT);
             $month =  str_pad(getMonth(), 2, "0", STR_PAD_LEFT);
         }
+
+        if ($request->daysForward) {
+            if (app()->getLocale() == 'fa') {
+                $date = verta(now())->addDays($request->daysForward);
+                $day = str_pad($date->day, 2, "0", STR_PAD_LEFT);
+                $month =  str_pad($date->month, 2, "0", STR_PAD_LEFT);
+            } else {
+                $date = now()->addDays($request->daysForward);
+                $day = str_pad($date->day, 2, "0", STR_PAD_LEFT);
+                $month =  str_pad($date->month, 2, "0", STR_PAD_LEFT);
+            }
+        } else if ($request->has('daysForward')) {
+            $day = str_pad(getDay(), 2, "0", STR_PAD_LEFT);
+            $month =  str_pad(getMonth(), 2, "0", STR_PAD_LEFT);
+        }
+
+
         if ($day != null) {
             $day = ltrim($day, '0');
             $people->where(function ($query) use ($day) {
@@ -197,11 +214,11 @@ class PersonController extends Controller
         if ($month != null) {
             $month = ltrim($month, '0');
             $people->where(function ($query) use ($month) {
-                if(strlen($month==2)){
+                if (strlen($month == 2)) {
                     $query->where('shamsi_birth', 'LIKE', '____/' . $month . '/%_');
-                }else{
+                } else {
                     $query->where('shamsi_birth', 'LIKE', '____/0' . $month . '/%_')
-                    ->orWhere('shamsi_birth', 'LIKE', '____/' . $month . '/%_');
+                        ->orWhere('shamsi_birth', 'LIKE', '____/' . $month . '/%_');
                 }
             });
         }
@@ -297,6 +314,11 @@ class PersonController extends Controller
         $person = new Person;
         return view('person.debt', compact('person'));
     }
+    public function creditor()
+    {
+        $person = new Person;
+        return view('person.creditor', compact('person'));
+    }
 
     public function birthday()
     {
@@ -324,9 +346,9 @@ class PersonController extends Controller
         } else if ($action == "all") {
             // dd(request()->all());
             if ($request->day or $request->month or $request->from_birthday or $request->to_birthday) {
-                $people = $this->search($request);
+                $people = $this->search($request)->get();
             } else {
-                $people = $this->search($request, true);
+                $people = $this->search($request, true)->get();
             }
             $sms = new SMS();
             foreach ($people as $person) {
@@ -365,7 +387,10 @@ class PersonController extends Controller
         $id = $request->id;
 
         if ($action == "all") {
-            $people = Person::where('balance', '<', 0)->get();
+            $people = Person::where('balance', '<', 0)->update([
+                'balance' => 0
+            ]);
+            return true;
         } else if ($action == "single") {
             $people = Person::where('id', $id)->where('balance', '<', 0)->get();
         }
@@ -393,6 +418,15 @@ class PersonController extends Controller
         $person = new Person;
         return $person->showDebt();
     }
+    public function removeCreditor(Request $request)
+    {
+        $action = $request->action;
+        if ($action == "all") {
+            Person::where('balance', '>', 0)->update([
+                'balance' => 0
+            ]);
+        }
+    }
 
     public function searchDebt(Request $request)
     {
@@ -401,6 +435,27 @@ class PersonController extends Controller
         $to_price = $request->to_price * (-1);
 
         $people = Person::query()->where('balance', '<', 0);
+
+        if ($person_id != null) {
+            $people->where('id', $person_id);
+        }
+        if ($from_price != null) {
+            $people->where('balance', '>=', $from_price);
+        }
+        if ($to_price != null) {
+            $people->where('balance', '<=', $to_price);
+        }
+
+        $people = $people->get();
+        return $people;
+    }
+    public function searchCreditor(Request $request)
+    {
+        $person_id = $request->person_id;
+        $from_price = $request->from_price;
+        $to_price = $request->to_price;
+
+        $people = Person::query()->where('balance', '>', 0);
 
         if ($person_id != null) {
             $people->where('id', $person_id);
@@ -441,6 +496,32 @@ class PersonController extends Controller
                 ->make(true);
         }
     }
+    public function creditorTable(Request $request)
+    {
+        if ($request->ajax()) {
+            if ($request->has('filter_search')) {
+                $data = $this->searchDebt($request);
+                $data = $this->searchCreditor($request);
+            } else {
+                $data = Person::where('balance', '>', 0)->get();
+            }
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->editColumn('name', function (Person $person) {
+                    return $person->getFullName();
+                })
+                ->editColumn('balance', '{{ cnf($balance) }}')
+                ->addColumn('action', function (Person $person) {
+                    $actionBtn = '<a href="' . route('reportPerson', ['id' => $person->id]) . '" class="btn btn-sm btn-info">گزارش حساب</a>';
+                    // if (request()->user()->can('unlimited')) {
+                    //     $actionBtn .= '<button class="btn btn-sm btn-warning remove-debt mx-1" data-id="' . $person->id . '" data-balance="' . $person->balance . '" data-person_name="' . $person->getFullName() . '"  data-bs-toggle="modal" data-bs-target="#crud">تسویه حساب</button>';
+                    // }
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+    }
 
     public function exportDebt(Request $request)
     {
@@ -471,6 +552,18 @@ class PersonController extends Controller
             $data = $this->searchDebt($request);
         } else {
             $data = Person::where('balance', '<', 0)->get();
+        }
+        if ($data->count() <= 0) {
+            return 0;
+        }
+        return $data->sum('balance');
+    }
+    public function getSumCreditor(Request $request)
+    {
+        if ($request->has('filter_search')) {
+            $data = $this->searchCreditor($request);
+        } else {
+            $data = Person::where('balance', '>', 0)->get();
         }
         if ($data->count() <= 0) {
             return 0;

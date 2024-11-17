@@ -14,7 +14,7 @@ class Section extends Main
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['id', 'name', 'show_status', 'details'];
+    protected $fillable = ['id', 'name', 'show_status', 'details','type'];
 
     public function prices()
     {

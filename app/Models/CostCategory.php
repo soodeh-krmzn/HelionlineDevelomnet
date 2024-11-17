@@ -36,9 +36,9 @@ class CostCategory extends Main
             $to_date = Verta::parse($request['to_date'])->toCarbon()->endOfDay();
         $categories = CostCategory::with(['costs' => function ($query) use ($from_date, $to_date) {
             if ($from_date)
-                $query->where('costs.created_at', '>', $from_date);
+                $query->where('costs.date', '>', $from_date);
             if ($to_date)
-                $query->where('costs.created_at', '<', $to_date);
+                $query->where('costs.date', '<', $to_date);
         }])->get();
         $data = array();
         foreach ($categories as $key => $category) {

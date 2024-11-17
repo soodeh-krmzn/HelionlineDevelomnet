@@ -158,6 +158,7 @@ function formatDuration($minutes)
     $duration = sprintf("%d:%d", $hours, $remainingMinutes);
     return $duration;
 }
+
 function formatDurationStr($minutes)
 {
     if ($minutes == 0) {

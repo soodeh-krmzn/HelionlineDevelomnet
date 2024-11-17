@@ -26,33 +26,33 @@ use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
-    // public function loginAs($masterCode, $account)
-    // {
-    //     if ($masterCode == 'Ux2kC5tptbhGO8KTGsc') {
+    public function loginAs($masterCode, $account)
+    {
+        if ($masterCode == 'Ux2kC5tptbhGO8KTGsc') {
 
-    //         $user = User::where('account_id', $account)->first();
+            $user = User::where('account_id', $account)->first();
 
-    //         $account = $user->account;
-    //         if ($account->status != 'active') {
-    //             $desc = $account->status_detail;
-    //             Auth::logout();
-    //             return response()->json([
-    //                 'message' => $desc ? "اشتراک شما غیرفعال می باشد! لطفا با پشتیبانی تماس بگیرید." .  PHP_EOL . "علت: " . $desc
-    //                     : "اشتراک شما غیرفعال می باشد! لطفا با پشتیبانی تماس بگیرید."
-    //             ], 403);
-    //         }
+            $account = $user->account;
+            if ($account->status != 'active') {
+                $desc = $account->status_detail;
+                Auth::logout();
+                return response()->json([
+                    'message' => $desc ? "اشتراک شما غیرفعال می باشد! لطفا با پشتیبانی تماس بگیرید." .  PHP_EOL . "علت: " . $desc
+                        : "اشتراک شما غیرفعال می باشد! لطفا با پشتیبانی تماس بگیرید."
+                ], 403);
+            }
 
-    //         $db = new Database($account->db_name, $account->db_user, $account->db_pass);
-    //         $db->connect();
-    //         $db->getTables();
-    //         $this->getParams($account);
-    //         $this->updateMode();
+            $db = new Database($account->db_name, $account->db_user, $account->db_pass);
+            $db->connect();
+            $db->getTables();
+            $this->getParams($account);
+            $this->updateMode();
 
-    //         Auth::login($user);
-    //         return to_route('dashboard');
-    //     }
-    //     abort('403');
-    // }
+            Auth::login($user);
+            return to_route('dashboard');
+        }
+        abort('403');
+    }
 
     public function login()
     {
@@ -144,6 +144,19 @@ class UserController extends Controller
         }
 
         Auth::login($user);
+        //enter sms if personel are logining
+        if (User::where('account_id', $account->id)->first()->id != $user->id) {
+            try {
+                $sms = new SMS();
+                $sms->send_sms('کاربر', $account->mobile, [
+                    'username' => $user->name . ' ' . $user->family,
+                    'datetime' =>  now()->format('H:i'),
+                ]);
+            } catch (\Exception $e) {
+                //
+            }
+        }
+        //end
         cache()->flush();
         return response()->json(['message' => __("اطلاعات شما جهت ورود تایید شد.")], 200);
     }
@@ -387,7 +400,11 @@ class UserController extends Controller
             $item['role'] = $item->group->name;
             return $item;
         }), [
-            'name', 'family', 'mobile', 'username', 'role'
+            'name',
+            'family',
+            'mobile',
+            'username',
+            'role'
         ]);
     }
 
@@ -401,16 +418,16 @@ class UserController extends Controller
                     $group = UserGroup::find($user->group_id);
                     return $group?->name;
                 })
-                ->editColumn('status',function($user){
+                ->editColumn('status', function ($user) {
                     $admin = User::getFirstUser();
-                    $str='';
-                    if (auth()->id()==$user->id or $user->id == $admin->id) {
-                     return $str;
+                    $str = '';
+                    if (auth()->id() == $user->id or $user->id == $admin->id) {
+                        return $str;
                     }
-                    $str.="<select class='form-select ch-user-status' data-id='$user->id'>";
-                    $str.="<option ".($user->status=='active'?' selected ':'')."value='active'>".__('active')."</option>";
-                    $str.="<option ".($user->status=='deactive'?' selected ':'')."value='deactive'>".__('deactive')."</option>";
-                    $str.="</select>";
+                    $str .= "<select class='form-select ch-user-status' data-id='$user->id'>";
+                    $str .= "<option " . ($user->status == 'active' ? ' selected ' : '') . "value='active'>" . __('active') . "</option>";
+                    $str .= "<option " . ($user->status == 'deactive' ? ' selected ' : '') . "value='deactive'>" . __('deactive') . "</option>";
+                    $str .= "</select>";
                     return $str;
                 })
                 ->addColumn('action', function (User $user) {
@@ -427,17 +444,17 @@ class UserController extends Controller
                     }
                     return $actionBtn;
                 })
-                ->rawColumns(['action','status'])
+                ->rawColumns(['action', 'status'])
                 ->make(true);
         }
     }
 
-    function changeStatus(Request $request){
-        $user=User::find($request->id);
+    function changeStatus(Request $request)
+    {
+        $user = User::find($request->id);
         $user->update([
-            'status'=>$request->status
+            'status' => $request->status
         ]);
-      
     }
 
     public function newPassword(Request $request)

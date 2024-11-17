@@ -114,3 +114,21 @@ function confirmAction(text,action){
         }
     });
 }
+function cnf(number, decimals = 2, decimalSeparator = '.', thousandsSeparator = ',') {
+    // Format the number with specified decimal and thousands separators
+    let formattedNumber = number.toFixed(decimals).toString();
+
+    // Split the number into integer and decimal parts
+    let parts = formattedNumber.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator); // Add thousands separator
+
+    // Rejoin the parts
+    formattedNumber = parts.join(decimalSeparator);
+
+    // Remove trailing zeros if decimals > 0
+    if (decimals > 0) {
+        formattedNumber = formattedNumber.replace(/\.?0+$/, ''); // Remove trailing zeros
+    }
+
+    return formattedNumber;
+}

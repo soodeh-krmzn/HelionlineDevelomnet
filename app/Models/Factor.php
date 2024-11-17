@@ -152,6 +152,10 @@ class Factor extends Main
                 <hr>
 
             <?php
+            }else{
+                ?>
+                <p class="text-center">مشتری: <?=$game->person->getFullName()?></p>
+                <?php
             }
             ?>
             <?php $factor->showProducts($g_id, $factor->id, $f_type, $products) ?>

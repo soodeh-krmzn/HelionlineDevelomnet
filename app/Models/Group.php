@@ -20,8 +20,8 @@ class Group extends Main
     public function showIndex()
     {
         $groups = Group::orderBy('name', 'desc')->get();
-        if($groups->count() > 0) {
-            ?>
+        if ($groups->count() > 0) {
+?>
             <table id="group-table" class="table table-hover border-top">
                 <thead>
                     <tr>
@@ -32,34 +32,34 @@ class Group extends Main
                     </tr>
                 </thead>
                 <tbody>
-                <?php
-                $i = 1;
-                foreach ($groups as $group) { ?>
-                    <tr>
-                        <td><?php echo $i; ?></td>
-                        <td><?php echo $group->name; ?></td>
-                        <td><?php echo $group->details; ?></td>
-                        <td>
-                            <button type="button" class="btn btn-warning btn-sm crud" data-action="update" data-id="<?php echo $group->id; ?>" data-bs-target="#crud" data-bs-toggle="modal">
-                                <i class="bx bx-edit"></i>
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm delete-group" data-id="<?php echo $group->id; ?>"><i class="bx bx-trash"></i></button>
-                        </td>
-                    </tr>
                     <?php
-                    $i++;
-                }
-                ?>
+                    $i = 1;
+                    foreach ($groups as $group) { ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>
+                            <td><?php echo $group->name; ?></td>
+                            <td><?php echo $group->details; ?></td>
+                            <td>
+                                <button type="button" class="btn btn-warning btn-sm crud" data-action="update" data-id="<?php echo $group->id; ?>" data-bs-target="#crud" data-bs-toggle="modal">
+                                    <i class="bx bx-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm delete-group" data-id="<?php echo $group->id; ?>"><i class="bx bx-trash"></i></button>
+                            </td>
+                        </tr>
+                    <?php
+                        $i++;
+                    }
+                    ?>
                 </tbody>
             </table>
-            <?php
+        <?php
         } else { ?>
             <div class="row mx-1">
                 <div class="col-12">
                     <div class="alert alert-danger text-center m-0"><?php echo __('موردی جهت نمایش موجود نیست.') ?></div>
                 </div>
             </div>
-            <?php
+        <?php
         }
     }
 
@@ -102,24 +102,29 @@ class Group extends Main
                 <?php
                 if ($action == "create") { ?>
                     <button type="button" id="store-group" data-action="create" class="btn btn-success me-sm-3 me-1 submit-by-enter"><?php echo __('ثبت اطلاعات') ?></button>
-                    <?php
+                <?php
                 } else {
-                    ?>
+                ?>
                     <button type="button" id="store-group" data-id="<?php echo $id ?>" data-action="update" class="btn btn-warning me-sm-3 me-1 submit-by-enter"><?php echo __('ویرایش اطلاعات') ?></button>
-                    <?php
+                <?php
                 } ?>
                 <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close"><?php echo __('انصراف') ?></button>
             </div>
         </div>
-        <?php
+    <?php
     }
 
     public function peopleForm()
     {
         $title = __('افزودن اشخاص');
         $people = Person::latest()->get();
-        ?>
+    ?>
         <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button id="export-people" style="position: absolute;top: 14px;right: 11px;" class="btn btn-sm btn-success">
+            <span>
+                <i class="bx bxs-file-export"></i>
+            </span>
+        </button>
         <div class="modal-body">
             <div class="text-center mb-4 mt-0 mt-md-n2">
                 <h3 class="secondary-font"><?php echo $title; ?></h3>
@@ -133,7 +138,7 @@ class Group extends Main
                         <?php
                         foreach ($people as $person) { ?>
                             <option value="<?php echo $person->id ?>" <?php echo $this->people->contains($person->id) ? 'selected' : '' ?>><?php echo $person->getFullName() . ' ( ' . $person->id . ' )' ?></option>
-                            <?php
+                        <?php
                         } ?>
                     </select>
                 </div>
@@ -145,12 +150,12 @@ class Group extends Main
                 <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close"><?php echo __('انصراف') ?></button>
             </div>
         </div>
-        <?php
+    <?php
     }
 
     public function showPeople()
     {
-        ?>
+    ?>
         <div class="row mx-1 my-3">
             <div class="col-12 mb-3">
                 <div class="d-flex">
@@ -163,7 +168,7 @@ class Group extends Main
             <div class="row">
                 <?php
                 foreach ($this->people as $person) {
-                    ?>
+                ?>
                     <div class="col-3 mb-3">
                         <div class="d-flex">
                             <div class="form-check me-3 me-lg-5 mb-0 mt-0">
@@ -172,17 +177,17 @@ class Group extends Main
                             </div>
                         </div>
                     </div>
-                    <?php
+                <?php
                 }
                 ?>
             </div>
         </div>
-        <?php
+    <?php
     }
 
     public function showCheckbox($groups)
     {
-        ?>
+    ?>
         <div class="row">
             <div class="col-3 mb-4">
                 <div class="d-flex">
@@ -202,11 +207,10 @@ class Group extends Main
                         </div>
                     </div>
                 </div>
-                <?php
+            <?php
             }
             ?>
         </div>
-        <?php
+<?php
     }
-
 }

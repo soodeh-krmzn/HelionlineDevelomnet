@@ -53,16 +53,23 @@ class Transfer
         $list = Person2::all();
         $i = 1;
         foreach ($list as $l) {
-            if ($l->expire != null) {
-                $ex = str_replace('/', '-', $l->expire);
-                $expire = Verta::parse($ex)->formatGregorian('Y-m-d');
-            } else {
-                $expire = null;
-            }
-            $l->update([
-                'expire' => $expire
-            ]);
+            try {
+                if ($l->expire != null) {
+                    $ex = str_replace('/', '-', $l->expire);
+                    $expire = Verta::parse($ex)->formatGregorian('Y-m-d');
+                } else {
+                    $expire = null;
+                }
+                $l->update([
+                    'expire' => $expire
+                ]);
             $i++;
+            } catch (\Throwable $th) {
+                $l->update([
+                    'expire' => null
+                ]);
+                dump($l->expire,$th->getMessage());
+            }
         }
     }
 
@@ -199,10 +206,10 @@ class Transfer
             if ($person->p_birth != null) {
                 try {
                     $birth = Verta::parse($person->p_birth)->formatGregorian('Y-m-d');
-                    $shamsi=str_replace('-','/',$person->p_birth);
+                    $shamsi = str_replace('-', '/', $person->p_birth);
                 } catch (\Throwable $th) {
                     $birth = null;
-                    $shamsi=null;
+                    $shamsi = null;
                 }
             } else {
                 $birth = null;
@@ -490,5 +497,18 @@ class Transfer
             DB::table($table_name)->truncate();
         }
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+    }
+    public function shamsitoGregorian()
+    {
+        $persons = Person2::whereNotNull('shamsi_birth')->whereNull('birth')->get();
+        foreach ($persons as $person) {
+            try {
+                $person->shamsi_birth=str_replace('-', '/', $person->shamsi_birth);
+                $person->birth = Verta::parse($person->shamsi_birth)->formatGregorian('Y-m-d');
+                $person->save();
+            } catch (\Throwable $th) {
+                dump($person,$th->getMessage());
+            }
+        }
     }
 }

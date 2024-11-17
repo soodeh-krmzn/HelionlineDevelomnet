@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('نام بخش');
+            $table->string('type')->default('waterfall')->comment('نوع بخش');
             $table->tinyInteger('show_status')->comment('وضعیت نمایش');
             $table->text('details')->nullable()->comment('توضیحات');
             $table->softDeletes();
