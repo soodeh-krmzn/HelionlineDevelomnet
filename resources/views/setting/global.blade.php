@@ -103,6 +103,9 @@
                                         <option value="count"
                                             {{ in_array('count', explode(',', $setting->getSetting('game_table_columns'))) ? 'selected' : '' }}>
                                             {{ __('تعداد') }}</option>
+                                            <option value="group_name"
+                                            {{ in_array('group_name', explode(',', $setting->getSetting('game_table_columns'))) ? 'selected' : '' }}>
+                                            {{ __('گروه') }}</option>
                                         <option value="counter_id"
                                             {{ in_array('counter_id', explode(',', $setting->getSetting('game_table_columns'))) ? 'selected' : '' }}>
                                             {{ __('شمارنده') }}</option>
@@ -112,6 +115,7 @@
                                         <option value="station_name"
                                             {{ in_array('station_name', explode(',', $setting->getSetting('game_table_columns'))) ? 'selected' : '' }}>
                                             {{ __('ایستگاه') }}</option>
+
                                     </select>
                                 </div>
                                 <div class="mb-3 col-md-6">

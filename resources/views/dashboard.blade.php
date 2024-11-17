@@ -103,6 +103,9 @@
                                         <span>&nbsp{{ __('شمارنده') }}&nbsp</span>
                                     </a>
                                 </div>
+
+                                {{-- all exept پایه و basic --}}
+                                @if (!in_array(auth()->user()->account->package->id,[1,10]))
                                 <div class="col mx-2 my-2">
                                     <button class="btn btn-primary btn-lg w-100" id="crud-user-activity"
                                         data-bs-toggle="modal" data-bs-target="#user-activity-modal">
@@ -110,6 +113,7 @@
                                         <span>&nbsp{{ __('پرسنل') }}&nbsp</span>
                                     </button>
                                 </div>
+                                @endif
                                 <div class="col mx-2 my-2">
                                     <a href="https://helisoft.ir/musics/" target="_blank" class="btn btn-info btn-lg w-100">
                                         <i class="bx bx-music"></i>
@@ -260,7 +264,7 @@
         </div>
     @endif
 
-    <div class="modal fade" style="" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-modal="true"
+    <div class="modal fade" style="z-index: 8000;" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-modal="true"
         role="dialog" id="edit-meta-modal" aria-hidden="true">
         <div class="modal-dialog ">
             <div class="modal-content p-3 p-md-5">
@@ -436,6 +440,7 @@
             })
 
         })
+
         $(document.body).on('click', '#store-meta-period-btn', function() {
             data = {
                 target: 'edit-meta-period',
@@ -449,12 +454,12 @@
                     $('#edit-meta-error').html(response.message);
                     $('#edit-meta-error').show();
                     return 'done';
-                }else{
+                } else {
                     window.editMetaModal.hide();
                     refreshLoadGame(response.g_id);
                 }
 
-            },null,false);
+            }, null, false);
         });
 
         // $('.edit-meta').on('click', function() {
@@ -551,6 +556,7 @@
         }
 
         $(document).ready(function() {
+
 
             $(document.body).on("click", "#print-bill", function() {
                 let id = $(this).data('id');

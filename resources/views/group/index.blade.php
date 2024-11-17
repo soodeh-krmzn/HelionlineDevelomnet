@@ -13,7 +13,8 @@
             <div class="card-datatable table-responsive">
                 <div class="row mx-1">
                     <div class="col-12">
-                        <div class="mt-3 mb-3dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-md-end justify-content-center flex-wrap me-1">
+                        <div
+                            class="mt-3 mb-3dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-md-end justify-content-center flex-wrap me-1">
                             <div class="dt-buttons btn-group flex-wrap">
                                 <div class="btn-group">
                                     <button id="export" class="btn btn-success">
@@ -24,7 +25,8 @@
                                     </button>
                                 </div>
                                 @can('create')
-                                    <button type="button" class="btn add-new btn-primary ms-2 crud" data-action="create" data-id="0" data-bs-toggle="modal" data-bs-target="#crud">
+                                    <button type="button" class="btn add-new btn-primary ms-2 crud" data-action="create"
+                                        data-id="0" data-bs-toggle="modal" data-bs-target="#crud">
                                         <span>
                                             <i class="bx bx-plus"></i>
                                             <span class="d-none d-lg-inline-block">{{ __('گروه جدید') }}</span>
@@ -60,7 +62,6 @@
 
 @section('footer-scripts')
     <script type="text/javascript">
-
         let table = `<div class="table-responsive">
         <table id="groupTable" class="table table-hover border-top">
             <thead>
@@ -83,10 +84,18 @@
                     "type": "GET",
                     "data": fields ?? {}
                 },
-                columns: [
-                    {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
-                    {data: 'name'},
-                    {data: 'details'},
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name'
+                    },
+                    {
+                        data: 'details'
+                    },
                     {
                         data: 'action',
                         orderable: false,
@@ -113,11 +122,11 @@
                 $.ajax({
                     type: "POST",
                     url: "{{ route('crudGroup') }}",
-                    data:{
+                    data: {
                         id: id,
                         action: action
                     },
-                    success:function(data) {
+                    success: function(data) {
                         $("#crud-result").html(data);
                         $("#loading").fadeOut();
                     },
@@ -148,7 +157,7 @@
                             action: action,
                             id: id,
                             name: name,
-                            details:details
+                            details: details
                         },
                         success: function(data) {
                             makeTable();
@@ -188,10 +197,10 @@
                         $.ajax({
                             type: "POST",
                             url: "{{ route('deleteGroup') }}",
-                            data:{
+                            data: {
                                 id: id
                             },
-                            success:function(data) {
+                            success: function(data) {
                                 makeTable();
                                 $("#loading").fadeOut();
                                 Swal.fire({
@@ -212,7 +221,33 @@
                     }
                 });
             });
+            $(document.body).on("click", "#export-people", function() {
 
+                $("#loading").fadeIn();
+                $.ajax({
+                    url: "{{ route('exportPeople') }}",
+                    type: "POST",
+                    data: {
+                        group_id: $(this).data('id')
+                    },
+                    success: function() {
+                        $("#loading").fadeOut();
+                        Swal.fire({
+                            title: "{{ __('عملیات موفق') }}",
+                            icon: "success",
+                            text: "{{ __('گزارش گیری انجام شد. از صفحه گزارشات اکسل میتوانید این گزارش را دانلود کنید.') }}"
+                        });
+                    },
+                    error: function(data) {
+                        $("#loading").fadeOut();
+                        Swal.fire({
+                            title: "{{ __('اخطار') }}",
+                            text: data.responseJSON.message,
+                            icon: "error"
+                        });
+                    }
+                });
+            });
             $(document.body).on("click", "#export", function() {
                 $("#loading").fadeIn();
                 $.ajax({
@@ -241,19 +276,21 @@
             $(document.body).on("click", ".show-people", function() {
                 $("#loading").fadeIn();
                 var id = $(this).data("id");
+                window.groupId = id;
                 $.ajax({
                     type: "GET",
                     url: "{{ route('peopleGroup') }}",
-                    data:{
+                    data: {
                         id: id
                     },
-                    success:function(data) {
+                    success: function(data) {
                         $("#people-result").html(data);
                         $("#people").select2({
                             placeholder: "{{ __('جهت انتخاب اشخاص کلیک کنید') }}",
                             closeOnSelect: false,
                             dropdownParent: $('#people-modal .modal-content')
                         });
+                        $("#export-people").data('id', window.groupId);
                         $("#loading").fadeOut();
                     },
                     error: function(data) {
@@ -274,11 +311,11 @@
                 $.ajax({
                     type: "POST",
                     url: "{{ route('storePeopleGroup') }}",
-                    data:{
+                    data: {
                         id: id,
                         people: people
                     },
-                    success:function(data) {
+                    success: function(data) {
                         $("#loading").fadeOut();
                         Swal.fire({
                             title: "{{ __('عملیات موفق') }}",

@@ -488,7 +488,11 @@
                     return;
                 }
                 $("#loading").fadeIn();
+                @if ($id=request('id'))
+                var person_id={{$id}};
+                @else
                 var person_id = $("#person-id").val();
+                @endif
                 var from_date = $("#from-date").val();
                 var to_date = $("#to-date").val();
                 var tab = $(".tab-pane.active").attr("id");

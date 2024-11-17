@@ -143,15 +143,33 @@
                     </div>
                 </div>
                 <div class="row mx-1">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div id="sum-container" class="alert alert-warning my-3 text-center">
                             {{ __('جمع کل') }}:
                             <span id="sum"></span>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div id="sum-container" class="alert alert-warning my-3 text-center">
-                            {{ __(' مجموع زمان') }}:
+                            {{ __(' مجموع زمان عادی') }}:
+                            <span id="sum-normal"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="sum-container" class="alert alert-warning my-3 text-center">
+                            {{ __(' مجموع زمان ویژه') }}:
+                            <span id="sum-vip"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="sum-container" class="alert alert-warning my-3 text-center">
+                            {{ __(' مجموع زمان مازاد') }}:
+                            <span id="sum-extra"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="sum-container" class="alert alert-warning my-3 text-center">
+                            {{ __(' مجموع کل زمان') }}:
                             <span id="sum-hours"></span>
                         </div>
                     </div>
@@ -229,6 +247,9 @@
                 success: function(data) {
                     $("#sum").html(addCommas(data.sumPrice));
                     $("#sum-hours").html(addCommas(data.sumHours));
+                    $("#sum-normal").html(addCommas(data.sumNormal));
+                    $("#sum-vip").html(addCommas(data.sumVip));
+                    $("#sum-extra").html(addCommas(data.sumExtra));
                 }
             });
         }

@@ -66,8 +66,18 @@
                             <div class="row mb-3">
                                 <div class="col-auto">
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input repetitive-mobile" {{$setting->getSetting('repetitive-mobile')=='true'?'checked':''}} type="checkbox" id="mobile-uniqnesss">
+                                        <input class="form-check-input repetitive-mobile"
+                                            {{ $setting->getSetting('repetitive-mobile') == 'true' ? 'checked' : '' }}
+                                            type="checkbox" id="mobile-uniqnesss">
                                         <label class="form-check-label" for="mobile-uniqnesss"> @lang('امکان ثبت موبایل تکراری')</label>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input " @checked($setting->getSetting('walletAsDefaultPay') == 'true') type="checkbox" id="walletAsDefaultPay">
+                                        <label class="form-check-label" for="walletAsDefaultPay">
+                                            @lang('اولویت پرداخت با کیف پول')
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -107,10 +117,10 @@
                 }
                 $("#loading").fadeIn();
                 var list = $("#setting-form .setting-input").serialize();
-                var repetitive_mobile=$('.repetitive-mobile').is(':checked');
-                console.log(repetitive_mobile);
+                var repetitive_mobile = $('.repetitive-mobile').is(':checked');
+                var walletAsDefaultPay = $('#walletAsDefaultPay').is(':checked');
                 var formData = new FormData();
-                list+="&repetitive-mobile="+repetitive_mobile;
+                list += "&repetitive-mobile=" + repetitive_mobile+"&walletAsDefaultPay="+walletAsDefaultPay;
                 formData.append("list", list);
 
                 $.ajax({

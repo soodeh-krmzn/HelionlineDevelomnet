@@ -10,11 +10,9 @@
                 @include('setting.nav-bar', ['page' => 'price'])
                 <div class="card my-4">
                     <div class="card-body">
-                        <div class="row mb-4">
-                            <div class="col">
+                        <div class="row mb-2">
+                            <div class="col-md-6">
                                 <label class="form-label">{{ __('لیست تعرفه') }}</label>
-                            </div>
-                            <div class="col">
                                 @if ($section->getSelect()->count() > 0)
                                     <select id="section-selector" class="form-select">
                                         <option value="">{{ __('انتخاب بخش') }}</option>
@@ -23,6 +21,13 @@
                                         @endforeach
                                     </select>
                                 @endif
+                            </div>
+                            <div class="col-md-6 section-type" style="display: none">
+                                <label class="form-label">{{ __('نوع تعرفه') }}</label>
+                                <select id="section-type" class="form-select">
+                                    <option value="waterfall">{{ __('آبشاری') }}</option>
+                                    <option value="stair">{{ __('پله ای') }}</option>
+                                </select>
                             </div>
                         </div>
                         <div class="row">
@@ -352,7 +357,14 @@
                     }
                 });
             });
-
+            $(document.body).on("change", "#section-type", function() {
+                data={
+                    id:$(this).data('id'),
+                    type:$(this).val(),
+                    target:'change-type'
+                }
+                actionAjax(window.location,data,'موفق','نوع تعرفه تغییر کرد');
+            });
             $(document.body).on("change", "#section-selector", function() {
                 if ($(this).val() == "") {
                     $("#no-price").show();
@@ -360,6 +372,7 @@
                 } else {
                     $("#prices").show();
                     $("#no-price").hide();
+                    $(".section-type").show();
                 }
                 $("#loading").fadeIn();
                 var id = $(this).find("option:selected").val();
@@ -369,8 +382,12 @@
                     data: {
                         id: id
                     },
-                    success: function(data) {
-                        $("#price-form-result").html(data);
+                    success: function(response) {
+                        console.log(response.section);
+
+                        $('#section-type').val(response.section.type);
+                        $('#section-type').data('id',response.section.id)
+                        $("#price-form-result").html(response.form);
                         $("#loading").fadeOut();
                         moneyFilter();
                         $('.money-filter').trigger('keyup');

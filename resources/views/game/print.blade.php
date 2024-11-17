@@ -32,9 +32,10 @@
 
 
         @media print {
-            body{
+            body {
                 width: fit-content !important;
             }
+
             th {
                 font-size: {{ $sizes['title'] }};
             }
@@ -93,48 +94,63 @@
     </table>
     <table class="bill-table table-bordered table text-center mt-1 mb-1">
         <tbody>
-            @foreach ($game->metas->groupBy('u_id') as $u_id => $u_idMetas )
-
-            <tr class="bg-light">
-                <th class="text-center">@lang('شروع و پایان')</th>
-                <th class="text-center">@lang('مدت')</th>
-                <th class="text-center">@lang('تعداد')</th>
-                <th class="no-print text-center">@lang('نوع')</th>
-                <th class="text-center">@lang('نرخ')</th>
-
-                <th class="text-center">@lang('مبلغ')</th>
-
-            </tr>
-            @foreach ($u_idMetas as $meta)
+            @php
+                $sectionType = $game->section->type;
+            @endphp
+            @foreach ($game->metas->groupBy('u_id') as $u_id => $u_idMetas)
                 @php
-                    $time_start = new DateTime($meta->start);
-                    $time_end = new DateTime($meta->end);
-                    $interval = $time_start->diff($time_end)->format('%h:%i');
-                    $interval2 = $time_start->diff($time_end);
-                    $minutes = $interval2->days * 24 * 60;
-                    $minutes += $interval2->h * 60;
-                    $minutes += $interval2->i;
+                    $u_idMinutes = 0;
                 @endphp
-                <tr>
-                    <td class="text-center">
-                        از
-                        {{ timeFormat($meta->start, 1)->format('H:i') }}
-                        @if ($meta->end)
-                        تا
-                        {{ timeFormat($meta->end, 1)->format('H:i') }}
-                        @endif
-                    </td>
-                    <td class="text-center">{{ $interval }}</td>
-                    <td class="text-center">{{ $meta->value }}</td>
-                    <td class="no-print text-center">
-                        <span class="badge bg-danger">{{ $meta->key=='normal' ? __('عادی') : __('ویژه') }}</span>
-                    </td>
 
+                <tr class="bg-light">
+                    <th class="text-center">@lang('شروع و پایان')</th>
+                    <th class="text-center">@lang('مدت')</th>
+                    <th class="text-center">@lang('تعداد')</th>
+                    <th class="no-print text-center">@lang('نوع')</th>
+                    @if ($sectionType != 'stair')
+                        <th class="text-center">@lang('نرخ')</th>
+                    @endif
 
-                    <td class="text-center">{!! cnf($meta->rate_price) . curr() !!}</td>
-                    <td>{!! $meta->rate_type=='all'?'-':cnf($meta->rate_price * $meta->value * $minutes) . curr() !!}</td>
+                    <th class="text-center">@lang('مبلغ')</th>
+
                 </tr>
-            @endforeach
+                @foreach ($u_idMetas as $meta)
+                    @php
+                        if ($sectionType == 'stair') {
+                            $metaInfo = $meta->calcPrice(null, $u_idMinutes);
+                            $u_idMinutes += $metaInfo['minutes'] ?? 0;
+                        }
+                        $time_start = new DateTime($meta->start);
+                        $time_end = new DateTime($meta->end);
+                        $interval = $time_start->diff($time_end)->format('%h:%i');
+                        $interval2 = $time_start->diff($time_end);
+                        $minutes = $interval2->days * 24 * 60;
+                        $minutes += $interval2->h * 60;
+                        $minutes += $interval2->i;
+                    @endphp
+                    <tr>
+                        <td class="text-center">
+                            از
+                            {{ timeFormat($meta->start, 1)->format('H:i') }}
+                            @if ($meta->end)
+                                تا
+                                {{ timeFormat($meta->end, 1)->format('H:i') }}
+                            @endif
+                        </td>
+                        <td class="text-center">{{ $interval }}</td>
+                        <td class="text-center">{{ $meta->value }}</td>
+                        <td class="no-print text-center">
+                            <span class="badge bg-danger">{{ $meta->key == 'normal' ? __('عادی') : __('ویژه') }}</span>
+                        </td>
+
+                        @if ($sectionType != 'stair')
+                            <td class="text-center">{!! cnf($meta->rate_price) . curr() !!}</td>
+                            <td>{!! $meta->rate_type == 'all' ? '-' : cnf($meta->rate_price * $meta->value * $minutes) . curr() !!}</td>
+                        @else
+                            <td>{!! cnf($metaInfo['price']) . curr() !!}</td>
+                        @endif
+                    </tr>
+                @endforeach
             @endforeach
 
         </tbody>

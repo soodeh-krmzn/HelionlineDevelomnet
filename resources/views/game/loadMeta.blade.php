@@ -3,6 +3,7 @@
         <tbody>
             @php
                 $pastMinutes = 0;
+
             @endphp
             @foreach ($metas->groupBy('u_id') as $u_id => $u_idMetas)
                 @php
@@ -12,8 +13,13 @@
                     @php
                         $time_start = new DateTime($meta->start);
                         $time_end = new DateTime($meta->end);
+
                         $interval = $time_start->diff($time_end)->format('%h:%i');
+
                         $metaInfo = $meta->calcPrice(null, $u_idMinutes);
+                        if (isset($metaInfo['message'])) {
+                            return "<div class='alert alert-danger text-center m-0'>" . $metaInfo['message'] . '</div>';
+                        }
                         $pastMinutes += $metaInfo['minutes'] ?? 0;
                         $u_idMinutes += $metaInfo['minutes'] ?? 0;
                     @endphp
@@ -26,7 +32,7 @@
                                         <th class="text-center">@lang('مدت')</th>
                                         <th class="text-center">@lang('تعداد')</th>
                                         <th class="no-print text-center">@lang('نوع')</th>
-                                        @if ($metaInfo['ratePrice'] ?? false)
+                                        @if ($metaInfo['ratePrice'] ?? false or !@$metaInfo['isStair'])
                                             <th class="text-center">@lang('نرخ')</th>
                                         @endif
                                         <?php if ($metaInfo['message'] ?? false or ($metaInfo['calc_type'] ?? '') == 'min') { ?>
@@ -45,13 +51,30 @@
                                         </td>
 
 
-                                        @if ($metaInfo['ratePrice'] ?? false)
-                                            <td class="text-center"><?php echo cnf($metaInfo['ratePrice']) . curr(); ?></td>
+                                        @if ($metaInfo['ratePrice'] ?? false or !@$metaInfo['isStair'])
+                                            <td class="text-center bg-red "><?php echo cnf($metaInfo['ratePrice']) . curr(); ?></td>
                                         @endif
                                         <?php
                                         if ($metaInfo['message'] ?? false or ($metaInfo['calc_type'] ?? '') == 'min') { ?>
-                                        <td><?php echo $metaInfo['message'] ?? cnf($metaInfo['ratePrice'] * $metaInfo['minutes'] * $meta->value) . curr();
-                                        ?></td>
+                                        <td>
+
+                                            @if ($metaInfo['isStair'])
+                                                @php
+                                                    echo cnf($metaInfo['price']) ?? 0 . curr();
+                                                @endphp
+                                            @else
+                                                @php
+                                                    echo $metaInfo['message'] ??
+                                                        cnf(
+                                                            $metaInfo['ratePrice'] *
+                                                                $metaInfo['minutes'] *
+                                                                $meta->value,
+                                                        ) .
+                                                            curr();
+                                                @endphp
+                                            @endif
+
+                                        </td>
                                         <?php } ?>
                                     </tr>
                                 </tbody>
@@ -94,7 +117,8 @@
                             <?php
                                             }
                                             ?>
-                            <button type="button" class="btn btn-secondary btn-sm edit-meta" data-id="<?php echo $meta->id; ?>">
+                            <button type="button" class="btn btn-secondary btn-sm edit-meta"
+                                data-id="<?php echo $meta->id; ?>">
                                 <i data-toggle="tooltip" title="@lang('ویرایش')" class="bx bxs-pencil"></i>
                             </button>
                         </td>

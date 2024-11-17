@@ -363,6 +363,7 @@
                         $(".select2-p").select2({
                             dropdownParent: $('#crud .modal-content')
                         });
+                        searchPersonM();
                         $("#loading").fadeOut();
                     },
                     error: function(data) {

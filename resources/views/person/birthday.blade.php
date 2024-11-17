@@ -114,7 +114,16 @@
                     <div class="col">
                         <button class="btn btn-primary me-1" type="button" data-bs-toggle="collapse"
                             data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                            <i class='bx bx-search me-1'></i> <span class="d-none d-lg-inline-block">@lang('جستجو')</span>
+                            <i class='bx bx-search me-1'></i> <span
+                                class="d-none d-lg-inline-block">@lang('جستجو')</span>
+                        </button>
+                        <button id="forward-birth" class="btn btn-info btn-sm me-1" type="button">
+                            <i class='bx bx-search me-1'></i> <span class="d-none d-lg-inline-block">
+                                تولد های
+                            </span>
+                            <input type="number" class="form-control mx-1" style="width: 60px;height: 30px;"
+                                id="days-forward" value="0">
+                            روز بعد
                         </button>
                     </div>
                     <div class="col">
@@ -162,14 +171,15 @@
 @stop
 @section('footer-scripts')
     <script type="text/javascript">
+        window.daysForward = 0;
         $(document).ready(function() {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
-                    let table = `<div class="table-responsive">
+            let table = `<div class="table-responsive">
             <table id="testTable" class="table table-hover border-top">
                 <thead>
                     <tr>
@@ -184,218 +194,232 @@
                 </thead>
             </table></div>`;
 
-                    function makeTable(fields = null) {
-                        $("#result").html(table);
-                        $("#testTable").DataTable({
-                            processing: true,
-                            serverSide: true,
-                            ajax: {
-                                "url": "{{ route('tablePerson') }}",
-                                "type": "GET",
-                                "data": fields ?? {}
-                            },
-                            columns: [{
-                                    data: 'DT_RowIndex',
-                                    name: 'DT_RowIndex',
-                                    orderable: false, searchable: false
-                                },
-                                {
-                                    data: 'name'
-                                },
-                                {
-                                    data: 'family'
-                                },
-                                {
-                                    data: 'birth'
-                                },
-                                {
-                                    data: 'lastSend'
-                                },
-                                {
-                                    data: 'mobile'
-                                },
-                                {
-                                    data: 'action2',
-                                    orderable: false,
-                                    searchable: false
-                                },
-                            ]
-                        });
-                    }
+            function makeTable(fields = null) {
+                $("#result").html(table);
+                $("#testTable").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        "url": "{{ route('tablePerson') }}",
+                        "type": "GET",
+                        "data": fields ?? {}
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'name'
+                        },
+                        {
+                            data: 'family'
+                        },
+                        {
+                            data: 'birth'
+                        },
+                        {
+                            data: 'lastSend'
+                        },
+                        {
+                            data: 'mobile'
+                        },
+                        {
+                            data: 'action2',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ]
+                });
+            }
 
-                    window["data"] = {
-                        "day": "{{ getDay() }}",
-                        "month": "{{ getMonth() }}",
-                        "filter_search": true
-                    }
+            window["data"] = {
+                "day": "{{ getDay() }}",
+                "month": "{{ getMonth() }}",
+                "filter_search": true
+            }
 
-                    makeTable(window["data"]);
+            makeTable(window["data"]);
 
-                    $(document.body).on("change", "#type", function() {
-                        if ($(this).val() == "d_m") {
-                            $(".f_t").hide();
-                            $("#from-birthday").val('');
-                            $("#to-birthday").val('');
-                            $(".d_m").show();
-                        } else if ($(this).val() == "f_t") {
-                            $(".d_m").hide();
-                            $("#day").val('');
-                            $("#month").val('');
-                            $(".f_t").show();
-                        }
+            $(document.body).on("change", "#type", function() {
+                if ($(this).val() == "d_m") {
+                    $(".f_t").hide();
+                    $("#from-birthday").val('');
+                    $("#to-birthday").val('');
+                    $(".d_m").show();
+                } else if ($(this).val() == "f_t") {
+                    $(".d_m").hide();
+                    $("#day").val('');
+                    $("#month").val('');
+                    $(".f_t").show();
+                }
+            });
+
+            $(document.body).on("click", "#search-person", function() {
+                var d = checkDate();
+                if (d) {
+                    Swal.fire({
+                        title: "@lang('اخطار')",
+                        icon: 'error',
+                        text: 'تاریخ وارد شده معتبر نمیباشد. (نمونه معتبر 1401/01/01)'
                     });
+                    return;
+                }
+                $("#loading").fadeIn();
+                var day = $("#day").val();
+                var month = $("#month").val();
+                var from_birthday = $("#from-birthday").val();
+                var to_birthday = $("#to-birthday").val();
+                var data = {
+                    "day": day,
+                    "month": month,
+                    "from_birthday": from_birthday,
+                    "to_birthday": to_birthday,
+                    "filter_search": true
+                }
+                window["data"] = data;
+                makeTable(data);
+                $("#loading").fadeOut();
+            });
+            $(document.body).on("click", "#forward-birth", function() {
+                $("#loading").fadeIn();
+                var data = {
+                    daysForward: $('#days-forward').val(),
+                    filter_search: true
+                }
+                window.daysForward = data.daysForward;
+                window["data"] = data;
+                makeTable(data);
+                $("#loading").fadeOut();
+            });
 
-                    $(document.body).on("click", "#search-person", function() {
-                        var d = checkDate();
-                        if (d) {
-                            Swal.fire({
-                                title: "@lang('اخطار')",
-                                icon: 'error',
-                                text: 'تاریخ وارد شده معتبر نمیباشد. (نمونه معتبر 1401/01/01)'
-                            });
-                            return;
-                        }
+
+            $(document.body).on("click", ".send-sms", function() {
+                Swal.fire({
+                    title: "{{ __('اطمینان دارید؟') }}",
+                    text: "{{ __('آیا از انجام این کار اطمینان دارید؟') }}",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "{{ __('بله، مطمئنم.') }}",
+                    cancelButtonText: "{{ __('نه، پشیمون شدم.') }}"
+                }).then((result) => {
+                    if (result.isConfirmed) {
                         $("#loading").fadeIn();
+                        var id = $(this).data("id");
+                        var action = $(this).data("action");
                         var day = $("#day").val();
                         var month = $("#month").val();
+                        var daysForward = window.daysForward;
                         var from_birthday = $("#from-birthday").val();
                         var to_birthday = $("#to-birthday").val();
-                        var data = {
-                            "day": day,
-                            "month": month,
-                            "from_birthday": from_birthday,
-                            "to_birthday": to_birthday,
-                            "filter_search": true
-                        }
-                        window["data"] = data;
-                        makeTable(data);
-                        $("#loading").fadeOut();
-                    });
-
-                    $(document.body).on("click", ".send-sms", function() {
-                            Swal.fire({
-                                title: "{{ __('اطمینان دارید؟') }}",
-                                text: "{{ __('آیا از انجام این کار اطمینان دارید؟') }}",
-                                icon: "warning",
-                                showCancelButton: true,
-                                confirmButtonText: "{{ __('بله، مطمئنم.') }}",
-                                cancelButtonText: "{{ __('نه، پشیمون شدم.') }}"
-                            }).then((result) => {
-                                if (result.isConfirmed){
-                                    $("#loading").fadeIn();
-                                    var id = $(this).data("id");
-                                    var action = $(this).data("action");
-                                    var day = $("#day").val();
-                                    var month = $("#month").val();
-                                    var from_birthday = $("#from-birthday").val();
-                                    var to_birthday = $("#to-birthday").val();
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "{{ route('birthdaySms') }}",
-                                        data: {
-                                            id: id,
-                                            action: action,
-                                            day: day,
-                                            month: month,
-                                            from_birthday: from_birthday,
-                                            to_birthday: to_birthday
-                                        },
-                                        success: function(data) {
-                                            makeTable(window["data"]);
-                                            $("#loading").fadeOut();
-                                            Swal.fire({
-                                                title: "@lang('موفق')",
-                                                text: "@lang('با موفقیت انجام شد.')",
-                                                icon: "success"
-                                            });
-                                        },
-                                        error: function(data) {
-                                            $("#loading").fadeOut();
-                                            Swal.fire({
-                                                title: "@lang('خطا')",
-                                                text: data.respnoseJSON.message,
-                                                icon: "succcess"
-                                            });
-                                        }
-                                    });
-                                }
-
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('birthdaySms') }}",
+                            data: {
+                                id: id,
+                                action: action,
+                                day: day,
+                                month: month,
+                                daysForward:daysForward,
+                                from_birthday: from_birthday,
+                                to_birthday: to_birthday
+                            },
+                            success: function(data) {
+                                makeTable(window["data"]);
+                                $("#loading").fadeOut();
+                                Swal.fire({
+                                    title: "@lang('موفق')",
+                                    text: "@lang('با موفقیت انجام شد.')",
+                                    icon: "success"
                                 });
-                            });
-
-                        $(document.body).on("click", ".crud", function() {
-                            $("#loading").fadeIn();
-                            $.ajax({
-                                type: "POST",
-                                url: "{{ route('crudBirthday') }}",
-                                success: function(data) {
-                                    $("#crud-result").html(data);
-                                    $("#loading").fadeOut();
-                                },
-                                error: function(data) {
-                                    $("#loading").fadeOut();
-                                    Swal.fire({
-                                        title: "@lang('خطا')",
-                                        text: data.responseJSON.message,
-                                        icon: "error"
-                                    });
-                                }
-                            });
+                            },
+                            error: function(data) {
+                                $("#loading").fadeOut();
+                                Swal.fire({
+                                    title: "@lang('خطا')",
+                                    text: data.respnoseJSON.message,
+                                    icon: "succcess"
+                                });
+                            }
                         });
+                    }
 
-                        $(document.body).on("click", "#store-birthday", function() {
-                            $("#loading").fadeIn();
-                            var days = $("#days").val();
-                            $.ajax({
-                                type: "POST",
-                                url: "{{ route('storeBirthday') }}",
-                                data: {
-                                    days: days
-                                },
-                                success: function(data) {
-                                    $("#loading").fadeOut();
-                                    Swal.fire({
-                                        title: "@lang('موفق')",
-                                        text: "@lang('با موفقیت انجام شد.')",
-                                        icon: "success"
-                                    });
-                                },
-                                error: function(data) {
-                                    $("#loading").fadeOut();
-                                    Swal.fire({
-                                        title: "@lang('خطا')",
-                                        text: data.responseJSON.message,
-                                        icon: "error"
-                                    });
-                                }
-                            });
+                });
+            });
+
+            $(document.body).on("click", ".crud", function() {
+                $("#loading").fadeIn();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('crudBirthday') }}",
+                    success: function(data) {
+                        $("#crud-result").html(data);
+                        $("#loading").fadeOut();
+                    },
+                    error: function(data) {
+                        $("#loading").fadeOut();
+                        Swal.fire({
+                            title: "@lang('خطا')",
+                            text: data.responseJSON.message,
+                            icon: "error"
                         });
+                    }
+                });
+            });
 
-                        $(document.body).on("click", "#export", function() {
-                            $("#loading").fadeIn();
-                            $.ajax({
-                                url: "{{ route('exportPerson') }}",
-                                type: "POST",
-                                data: window["data"],
-                                success: function() {
-                                    $("#loading").fadeOut();
-                                    Swal.fire({
-                                        title:"@lang('موفق')",
-                                        icon: 'success',
-                                         text: "@lang('گزارش گیری انجام شد. از صفحه گزارشات اکسل میتوانید این گزارش را دانلود کنید.')"
-                                    });
-                                },
-                                error: function(data) {
-                                    $("#loading").fadeOut();
-                                    Swal.fire({
-                                        title: "@lang('خطا')",
-                                        text: data.responseJSON.message,
-                                        icon: "error"
-                                    });
-                                }
-                            });
+            $(document.body).on("click", "#store-birthday", function() {
+                $("#loading").fadeIn();
+                var days = $("#days").val();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('storeBirthday') }}",
+                    data: {
+                        days: days
+                    },
+                    success: function(data) {
+                        $("#loading").fadeOut();
+                        Swal.fire({
+                            title: "@lang('موفق')",
+                            text: "@lang('با موفقیت انجام شد.')",
+                            icon: "success"
                         });
+                    },
+                    error: function(data) {
+                        $("#loading").fadeOut();
+                        Swal.fire({
+                            title: "@lang('خطا')",
+                            text: data.responseJSON.message,
+                            icon: "error"
+                        });
+                    }
+                });
+            });
 
-                    });
+            $(document.body).on("click", "#export", function() {
+                $("#loading").fadeIn();
+                $.ajax({
+                    url: "{{ route('exportPerson') }}",
+                    type: "POST",
+                    data: window["data"],
+                    success: function() {
+                        $("#loading").fadeOut();
+                        Swal.fire({
+                            title: "@lang('موفق')",
+                            icon: 'success',
+                            text: "@lang('گزارش گیری انجام شد. از صفحه گزارشات اکسل میتوانید این گزارش را دانلود کنید.')"
+                        });
+                    },
+                    error: function(data) {
+                        $("#loading").fadeOut();
+                        Swal.fire({
+                            title: "@lang('خطا')",
+                            text: data.responseJSON.message,
+                            icon: "error"
+                        });
+                    }
+                });
+            });
+        });
     </script>
 @stop

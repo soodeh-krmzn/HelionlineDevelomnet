@@ -172,7 +172,7 @@
     <!-- Global JS -->
     <script src="{{ asset('assets/js/global.js?v=1.0') }}"></script>
     @include('sweetalert::alert')
-    <script src="{{ asset('assets/js/RMain.js') }}"></script>
+    <script src="{{ asset('assets/js/RMain.js?v=1') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             // console.log("{{ app('config')->get('app.timezone') . '-' . session('user_timezone') }}");
@@ -354,7 +354,36 @@
                 },
             });
         }
+        $(document.body).on("click", ".enter-default", function() {
+            // $('.clear-input').val('');
+            //===calculate total value
+            var total = 0;
+            $(`#${target}`).val(0);
+            $('.payment-price').each(function() {
+                total += parseFloat($(this).val()) || 0;
+            });
+            //===end
+            var initialPrice = $('#defaultPrice').val();
+            var rest = 0;
+            if (initialPrice > total) {
+                rest = initialPrice - total
+            }
+            var target = $(this).data('target');
+            var displayDefaultPrice = $('#displayDefaultPrice').val();
 
+            $(`input[data-id=${target}]`).val(cnf(rest));
+            $(`#${target}`).val(rest);
+
+            //===recalculate totalPay
+            var typeTotal = 0;
+            $('.type-price').each(function() {
+                typeTotal += parseFloat($(this).val()) || 0;
+            });
+
+
+            $('#total-pay').html(cnf(typeTotal));
+            //===end
+        });
     </script>
     @yield('footer-scripts')
 </body>

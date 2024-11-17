@@ -301,6 +301,13 @@
                 });
             });
 
+            $(document.body).on("change", "#price", function() {
+
+                let price=$(this).val();
+                // $('.default-payment-input').val(price);
+                $('.default-payment-price').val(price);
+                $('#defaultPrice').val(price);
+            });
             $(document.body).on("click", "#search-wallet", function() {
                 var d = checkDate();
                 if (d) {
