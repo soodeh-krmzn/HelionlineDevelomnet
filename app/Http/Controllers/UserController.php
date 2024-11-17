@@ -108,6 +108,7 @@ class UserController extends Controller
 
 
         $account = $user->account;
+        dd($account);
         if ($account->status != 'active') {
             $desc = $account->status_detail;
             Auth::logout();
