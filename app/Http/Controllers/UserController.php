@@ -117,7 +117,6 @@ class UserController extends Controller
             ], 403);
         }
 
-        dd( $account);
         $db = new Database($account->db_name, $account->db_user, $account->db_pass);
         $db->connect();
         $db->getTables();
