@@ -35,7 +35,7 @@ class Database
 
     public function connect()
     {
-        dd($this->db_pass,$this->db_name,$this->db_user);
+        // dd($this->db_pass,$this->db_name,$this->db_user);
 
         if ($this->db_name == "" || $this->db_user == "" || $this->db_pass == "") {
             abort(500, "خطای پیکربندی! لطفا با پشتیبان سیستم تماس بگیرید.");
