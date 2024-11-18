@@ -42,6 +42,7 @@ class Database
         }
 
         $decrypted = $this->decrypt();
+        dd($decrypted['name'],$decrypted['user'],$decrypted['pass']);
         DB::purge('mysql');
         Config::set('database.connections.mysql', [
             'driver' => 'mysql',
