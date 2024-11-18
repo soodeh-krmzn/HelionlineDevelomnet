@@ -196,7 +196,6 @@ class Menu extends Admin
         if (auth()->user()->access == 1) {
             // $packageMenus = Cache::rememberForever('package_menus', function () {
             $package = auth()->user()->account->package;
-            dd($package);
             $packageMenus = $package->menus()->where('display_nav', 1)->orderBy('display_order', 'asc')->pluck('menus.id')->toArray();
             // });
             $menus = Menu::find($packageMenus);
