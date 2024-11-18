@@ -105,7 +105,7 @@ class UserController extends Controller
                     : "حساب کاربری شما غیرفعال می باشد! لطفا با پشتیبانی تماس بگیرید."
             ], 403);
         }
-
+        dd($user);
 
         $account = $user->account;
         if ($account->status != 'active') {
