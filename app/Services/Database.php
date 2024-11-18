@@ -29,7 +29,7 @@ class Database
         $name = $encrypter->decryptString($this->db_name);
         $user = $encrypter->decryptString($this->db_user);
         $pass = $encrypter->decryptString($this->db_pass);
-
+        dd($this->db_name);
         return compact('name', 'user', 'pass');
     }
 
@@ -42,7 +42,7 @@ class Database
         }
 
         $decrypted = $this->decrypt();
-        dd($decrypted['name'],$decrypted['user'],$decrypted['pass']);
+        // dd($decrypted['name'],$decrypted['user'],$decrypted['pass']);
         DB::purge('mysql');
         Config::set('database.connections.mysql', [
             'driver' => 'mysql',
