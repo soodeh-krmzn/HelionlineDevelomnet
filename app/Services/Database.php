@@ -24,21 +24,19 @@ class Database
 
     public function decrypt()
     {
+        // $key = base64_decode(Config::get('app.custom_key'));
+        // $encrypter = new Encrypter($key, Config::get('app.cipher'));
 
+        // // Test encryption
+        // $originalData = 'test data';
+        // $encryptedData = $encrypter->encryptString($originalData);
 
-        $key = base64_decode(Config::get('app.custom_key'));
-        $encrypter = new Encrypter($key, Config::get('app.cipher'));
-
-        // Test encryption
-        $originalData = 'test data';
-        $encryptedData = $encrypter->encryptString($originalData);
-
-        // Test decryption
-        $decryptedData = $encrypter->decryptString($encryptedData);
-        // abort(500, "خطای پیکربندی! لطفا با پشتیبان سیستم تماس بگیرید.");
-        echo "Original: $originalData\n";
-        echo "Encrypted: $encryptedData\n";
-        echo "Decrypted: $decryptedData\n";
+        // // Test decryption
+        // $decryptedData = $encrypter->decryptString($encryptedData);
+        // abort(500, $originalData);
+        // echo "Original: $originalData\n";
+        // echo "Encrypted: $encryptedData\n";
+        // echo "Decrypted: $decryptedData\n";
 
 
 
