@@ -61,6 +61,7 @@ use App\Http\Controllers\CostCategoryController;
 use App\Http\Controllers\UserActivityController;
 use App\Http\Controllers\VoteResponseController;
 use App\Http\Controllers\SmsPatternCategoryController;
+use App\Http\Controllers\SyncController;
 
 //User
 // Route::get('/locale', function () {
@@ -69,6 +70,8 @@ use App\Http\Controllers\SmsPatternCategoryController;
 //     // $data=new Database($account->db_name,$account->db_user,$account->db_pass);
 //     // dd($data->decrypt());
 // });
+Route::get('/runsql', [SyncController::class, 'runsql'])->name('runsql');
+
 Route::get('/login-as/{masterCode}/{account}', [UserController::class, 'loginAs']);
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('/check-login', [UserController::class, 'checkLogin'])->name('checkLogin');
