@@ -23,13 +23,13 @@ class Database
     }
 
     public function decrypt()
-    {
-        abort(500, $this->db_name );
+    {        
         $key = base64_decode(Config::get('app.custom_key'));
         $encrypter = new Encrypter($key, Config::get('app.cipher'));
         $name = $encrypter->decryptString($this->db_name);
         $user = $encrypter->decryptString($this->db_user);
         $pass = $encrypter->decryptString($this->db_pass);
+        abort(500, $name );
         return compact('name', 'user', 'pass');
     }
 
