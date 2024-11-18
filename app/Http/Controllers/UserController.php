@@ -42,7 +42,8 @@ class UserController extends Controller
                 ], 403);
             }
 
-            $db = new Database($account->db_name, $account->db_user, $account->db_pass);
+            // $db = new Database($account->db_name, $account->db_user, $account->db_pass);
+            $db = new Database();
             $db->connect();
             $db->getTables();
             $this->getParams($account);

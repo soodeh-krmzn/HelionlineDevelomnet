@@ -15,12 +15,12 @@ class Database
     protected $db_user;
     protected $db_pass;
 
-    public function __construct($db_name = null, $db_user = null, $db_pass = null)
-    {
-        $this->db_name = $db_name ?? session('db_name');
-        $this->db_user = $db_user ?? session('db_user');
-        $this->db_pass = $db_pass ?? session('db_pass');
-    }
+    // public function __construct($db_name = null, $db_user = null, $db_pass = null)
+    // {
+    //     $this->db_name = $db_name ?? session('db_name');
+    //     $this->db_user = $db_user ?? session('db_user');
+    //     $this->db_pass = $db_pass ?? session('db_pass');
+    // }
 
     public function decrypt()
     {
@@ -53,22 +53,22 @@ class Database
     {
         // dd($this->db_pass,$this->db_name,$this->db_user);
 
-        if ($this->db_name == "" || $this->db_user == "" || $this->db_pass == "") {
-            abort(500, "خطای پیکربندی! لطفا با پشتیبان سیستم تماس بگیرید.");
-        }
+        // if ($this->db_name == "" || $this->db_user == "" || $this->db_pass == "") {
+        //     abort(500, "خطای پیکربندی! لطفا با پشتیبان سیستم تماس بگیرید.");
+        // }
 
-        $decrypted = $this->decrypt();
+        // $decrypted = $this->decrypt();
         // dd($decrypted['name'],$decrypted['user'],$decrypted['pass']);
         DB::purge('mysql');
         Config::set('database.connections.mysql', [
             'driver' => 'mysql',
             'host' => 'localhost',
-            'database' => $decrypted['name'],
-            'username' => $decrypted['user'],
-            'password' => $decrypted['pass'],
-            // 'database' => '2db',
-            // 'username' => 'root',
-            // 'password' => '',
+            // 'database' => $decrypted['name'],
+            // 'username' => $decrypted['user'],
+            // 'password' => $decrypted['pass'],
+            'database' => '2db',
+            'username' => 'root',
+            'password' => '',
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
