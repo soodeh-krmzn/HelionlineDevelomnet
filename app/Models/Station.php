@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Models\MyModels\Main;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Syncable;
 
 class station extends Main
 {
     use HasFactory;
+    use Syncable;
 
     protected $fillable = ['name', 'show_status', 'details'];
 

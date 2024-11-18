@@ -13,10 +13,12 @@ use App\Models\MyModels\Main;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Syncable;
 
 class Game extends Main
 {
     use HasFactory, SoftDeletes;
+    use Syncable;
 
     protected $guarded = [];
 

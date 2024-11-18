@@ -7,10 +7,12 @@ use App\Models\MyModels\Main;
 use App\Services\Database;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Syncable;
 
 class UserGroup extends Main
 {
     use HasFactory, SoftDeletes;
+    use Syncable;
 
     protected $fillable = ['name', 'description'];
 

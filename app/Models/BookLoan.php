@@ -6,10 +6,12 @@ use App\Models\User;
 use App\Models\MyModels\Main;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Syncable;
 
 class BookLoan extends Main
 {
     use HasFactory;
+    use Syncable;
 
     protected $fillable = ['user_id', 'person_id', 'book_id', 'return_date', 'status', 'details'];
 

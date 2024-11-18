@@ -6,10 +6,12 @@ use App\Models\MyModels\Main;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
+use App\Traits\Syncable;
 
 class Category extends Main
 {
     use HasFactory, SoftDeletes;
+    use Syncable;
 
     protected $fillable = ['id', 'name', 'parent_id', 'order', 'status', 'details', 'icon', 'image'];
 

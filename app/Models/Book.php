@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use App\Models\MyModels\Main;
+use App\Traits\Syncable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends Main
 {
     use HasFactory, SoftDeletes;
+    use Syncable; 
 
     protected $fillable = ['name', 'cage', 'cage_location', 'author', 'publisher', 'details'];
 

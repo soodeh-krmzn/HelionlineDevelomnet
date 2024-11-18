@@ -5,10 +5,12 @@ namespace App\Models;
 use App\Models\MyModels\Main;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Syncable;
 
 class FactorBody extends Main
 {
     use HasFactory, SoftDeletes;
+    use Syncable;
 
     protected $fillable = ['factor_id', 'product_id', 'product_name', 'product_price', 'product_buy_price', 'count', 'body_price', 'body_buy_price'];
 

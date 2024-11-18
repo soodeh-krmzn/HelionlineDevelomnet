@@ -6,10 +6,12 @@ use App\Models\MyModels\Main;
 use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Syncable;
 
 class Factor extends Main
 {
     use HasFactory, SoftDeletes;
+    use Syncable;
 
     protected $guarded = [];
 

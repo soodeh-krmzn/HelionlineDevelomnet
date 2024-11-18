@@ -6,10 +6,12 @@ use App\Models\MyModels\Main;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
+use App\Traits\Syncable;
 
 class Person extends Main
 {
     use HasFactory, SoftDeletes;
+    use Syncable;
 
     protected $fillable = ['id', 'created_by', 'name', 'family', 'fname', 'birth', 'shamsi_birth', 'address', 'card_code', 'gender', 'mobile', 'sharj', 'expire', 'pack', 'commitment', 'profile', 'club', 'rate', 'reg_code', 'national_code', 'wallet_value', 'balance'];
 

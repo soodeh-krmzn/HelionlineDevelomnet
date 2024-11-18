@@ -9,10 +9,12 @@ use App\Models\MyModels\Main;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Syncable;
 
 class Section extends Main
 {
     use HasFactory, SoftDeletes;
+    use Syncable;
 
     protected $fillable = ['id', 'name', 'show_status', 'details','type'];
 

@@ -8,10 +8,12 @@ use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
+use App\Traits\Syncable;
 
 class GameMeta extends Main
 {
     use HasFactory, SoftDeletes;
+    use Syncable;
 
     protected $guarded = [];
 
