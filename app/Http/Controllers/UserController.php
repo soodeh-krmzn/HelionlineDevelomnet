@@ -106,7 +106,7 @@ class UserController extends Controller
             ], 403);
         }
         return response()->json([
-            'message' => $user->name
+            'message' => $user->account->name
         ]);
 
         $account = $user->account;
