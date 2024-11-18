@@ -115,8 +115,8 @@ class UserController extends Controller
                     : "اشتراک شما غیرفعال می باشد! لطفا با پشتیبانی تماس بگیرید."
             ], 403);
         }
-
-        $db = new Database($account->db_name, $account->db_user, $account->db_pass);
+        $db = new Database();
+        // $db = new Database($account->db_name, $account->db_user, $account->db_pass);
         $db->connect();
         $db->getTables();
         $this->getParams($account);
