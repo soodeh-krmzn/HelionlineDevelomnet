@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('people', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->integer('created_by')->length(11)->comment('کاربر ایجاد');
             $table->string('name')->nullable()->comment('نام');
             $table->string('family')->nullable()->comment('نام خانوادگی');

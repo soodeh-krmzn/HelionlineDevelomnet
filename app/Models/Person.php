@@ -7,13 +7,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
 use App\Traits\Syncable;
+use Illuminate\Support\Str;
 
 class Person extends Main
 {
     use HasFactory, SoftDeletes;
     use Syncable;
 
-    protected $fillable = ['id', 'created_by', 'name', 'family', 'fname', 'birth', 'shamsi_birth', 'address', 'card_code', 'gender', 'mobile', 'sharj', 'expire', 'pack', 'commitment', 'profile', 'club', 'rate', 'reg_code', 'national_code', 'wallet_value', 'balance'];
+    protected $fillable = ['id', 'uuid', 'created_by', 'name', 'family', 'fname', 'birth', 'shamsi_birth', 'address', 'card_code', 'gender', 'mobile', 'sharj', 'expire', 'pack', 'commitment', 'profile', 'club', 'rate', 'reg_code', 'national_code', 'wallet_value', 'balance'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
+    }
 
     public function getGenderLabel($gender)
     {
@@ -65,8 +75,9 @@ class Person extends Main
     {
         return persianTime($this->birth);
     }
-    public function groupNames(){
-        return $this->belongsToMany(Group::class,'group_person', 'group_id','person_id')->pluck('name')->implode(' - ');
+    public function groupNames()
+    {
+        return $this->belongsToMany(Group::class, 'group_person', 'group_id', 'person_id')->pluck('name')->implode(' - ');
     }
     public function getBalance()
     {
@@ -106,7 +117,7 @@ class Person extends Main
             <table id="people-table" class="table table-hover border-top">
                 <thead>
                     <tr>
-                        <th><?=__('ردیف')?></th>
+                        <th><?= __('ردیف') ?></th>
                         <th>شماره عضویت</th>
                         <th>ثبت نام</th>
                         <th>نام</th>
@@ -151,7 +162,7 @@ class Person extends Main
         ?>
             <div class="row mx-1">
                 <div class="col-12">
-                    <div class="alert alert-danger text-center m-0"><?=__('موردی جهت نمایش موجود نیست.')?></div>
+                    <div class="alert alert-danger text-center m-0"><?= __('موردی جهت نمایش موجود نیست.') ?></div>
                 </div>
             </div>
         <?php
@@ -186,66 +197,66 @@ class Person extends Main
         <form class="add-new-user pt-0" id="addNewUserForm" onsubmit="return false">
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label class="form-label"><?=__('نام')?> <span class="text-danger">*</span></label>
-                    <input type="text" id="name" data-id="name" class="form-control checkEmpty" placeholder="<?=__('نام')?>..." value="<?php echo $name; ?>">
+                    <label class="form-label"><?= __('نام') ?> <span class="text-danger">*</span></label>
+                    <input type="text" id="name" data-id="name" class="form-control checkEmpty" placeholder="<?= __('نام') ?>..." value="<?php echo $name; ?>">
                     <div class="invalid-feedback" data-id="name" data-error="checkEmpty"></div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label"><?=__('نام خانوادگی')?><span class="text-danger">*</span></label>
-                    <input type="text" id="family" data-id="family" class="form-control checkEmpty" placeholder="<?=__('نام خانوادگی')?>..." value="<?php echo $family; ?>">
+                    <label class="form-label"><?= __('نام خانوادگی') ?><span class="text-danger">*</span></label>
+                    <input type="text" id="family" data-id="family" class="form-control checkEmpty" placeholder="<?= __('نام خانوادگی') ?>..." value="<?php echo $family; ?>">
                     <div class="invalid-feedback" data-id="family" data-error="checkEmpty"></div>
                 </div>
             </div>
             <div class="mb-3">
-                <label class="form-label"><?=__('شماره موبایل')?> <span class="text-danger">*</span></label>
-                <input type="text" id="mobile" data-id="mobile" class="form-control just-numbers checkMobile checkEmpty" placeholder="<?=__('شماره موبایل')?>..." value="<?php echo $mobile; ?>" maxlength="11">
+                <label class="form-label"><?= __('شماره موبایل') ?> <span class="text-danger">*</span></label>
+                <input type="text" id="mobile" data-id="mobile" class="form-control just-numbers checkMobile checkEmpty" placeholder="<?= __('شماره موبایل') ?>..." value="<?php echo $mobile; ?>" maxlength="11">
                 <div class="invalid-feedback" data-id="mobile" data-error="checkEmpty"></div>
                 <div class="invalid-feedback" data-id="mobile" data-error="checkMobile"></div>
             </div>
             <div class="mb-3">
-                <label class="form-label"><?=__('جنسیت')?> <span class="text-danger">*</span></label>
+                <label class="form-label"><?= __('جنسیت') ?> <span class="text-danger">*</span></label>
                 <select name="gender" id="gender" data-id="gender" class="form-select checkEmpty">
-                    <option value=""><?=__('انتخاب')?></option>
-                    <option <?php echo ($gender == 0) ? "selected" : ""; ?> value="0"><?=__('دختر')?></option>
-                    <option <?php echo ($gender == 1) ? "selected" : ""; ?> value="1"><?=__('پسر')?></option>
+                    <option value=""><?= __('انتخاب') ?></option>
+                    <option <?php echo ($gender == 0) ? "selected" : ""; ?> value="0"><?= __('دختر') ?></option>
+                    <option <?php echo ($gender == 1) ? "selected" : ""; ?> value="1"><?= __('پسر') ?></option>
                 </select>
                 <div class="invalid-feedback" data-id="gender" data-error="checkEmpty"></div>
             </div>
             <div class="mb-3">
-                <label class="form-label"> <?=__('کدملی')?> </label>
-                <input type="text" id="national_code" data-id="national_code" class="form-control text-start just-numbers checkNationalCode" placeholder=" <?=__('کدملی')?>..." value="<?php echo $national_code; ?>" maxlength="10">
+                <label class="form-label"> <?= __('کدملی') ?> </label>
+                <input type="text" id="national_code" data-id="national_code" class="form-control text-start just-numbers checkNationalCode" placeholder=" <?= __('کدملی') ?>..." value="<?php echo $national_code; ?>" maxlength="10">
                 <div class="invalid-feedback" data-id="national_code" data-error="checkNationalCode"></div>
             </div>
             <div class="mb-3">
-                <label class="form-label"><?=__('کد اشتراک')?></label>
-                <input type="text" id="reg_code" class="form-control text-start" placeholder="<?=__('کد اشتراک')?>..." value="<?php echo $reg_code; ?>">
+                <label class="form-label"><?= __('کد اشتراک') ?></label>
+                <input type="text" id="reg_code" class="form-control text-start" placeholder="<?= __('کد اشتراک') ?>..." value="<?php echo $reg_code; ?>">
             </div>
             <div class="mb-3">
-                <label class="form-label"><?=__('تاریخ تولد')?></label>
+                <label class="form-label"><?= __('تاریخ تولد') ?></label>
                 <input type="text" id="birth" data-id="birth" class="form-control text-start date-mask " placeholder="1401/01/01" value="<?php echo $birth; ?>">
                 <div class="invalid-feedback" data-id="birth" data-error="checkDate"></div>
             </div>
             <div class="mb-3">
-                <label class="form-label"><?=__('باشگاه مشتریان')?></label>
+                <label class="form-label"><?= __('باشگاه مشتریان') ?></label>
                 <select name="club" id="club" class="form-select">
-                    <option value="1" <?php echo $club == 1 ? "selected" : "" ?>><?=__('فعال')?></option>
-                    <option value="0" <?php echo $club == 0 ? "selected" : "" ?>><?=__('غیرفعال')?></option>
+                    <option value="1" <?php echo $club == 1 ? "selected" : "" ?>><?= __('فعال') ?></option>
+                    <option value="0" <?php echo $club == 0 ? "selected" : "" ?>><?= __('غیرفعال') ?></option>
                 </select>
             </div>
             <div class="col-12 text-center">
                 <?php
                 if ($action == "create") { ?>
                     <input type="hidden" id="id" value="0">
-                    <button type="button" id="store-person" data-action="create" class="btn btn-success me-sm-3 me-1 submit-by-enter"><?=__('ثبت اطلاعات')?></button>
+                    <button type="button" id="store-person" data-action="create" class="btn btn-success me-sm-3 me-1 submit-by-enter"><?= __('ثبت اطلاعات') ?></button>
                 <?php
                 } else if ($action == "update") {
                 ?>
                     <input type="hidden" id="id" value="<?php echo $id; ?>">
-                    <button type="button" id="store-person" data-action="update" class="btn btn-warning me-sm-3 me-1 submit-by-enter"><?=__('ویرایش اطلاعات')?></button>
+                    <button type="button" id="store-person" data-action="update" class="btn btn-warning me-sm-3 me-1 submit-by-enter"><?= __('ویرایش اطلاعات') ?></button>
                 <?php
                 }
                 ?>
-                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas"><?=__('انصراف')?></button>
+                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas"><?= __('انصراف') ?></button>
             </div>
         </form>
         <?php
@@ -259,11 +270,11 @@ class Person extends Main
             <table id="people-table" class="table table-hover border-top">
                 <thead>
                     <tr>
-                        <th><?=__('ردیف')?></th>
+                        <th><?= __('ردیف') ?></th>
                         <th>شماره عضویت</th>
                         <th>نام و نام خانوادگی</th>
                         <th>موبایل</th>
-                        <th><?=__('مبلغ')?></th>
+                        <th><?= __('مبلغ') ?></th>
                         <th>مدیریت</th>
                     </tr>
                 </thead>
@@ -299,7 +310,7 @@ class Person extends Main
         ?>
             <div class="row">
                 <div class="col-12">
-                    <div class="alert alert-danger text-center m-0"><?=__('موردی جهت نمایش موجود نیست.')?></div>
+                    <div class="alert alert-danger text-center m-0"><?= __('موردی جهت نمایش موجود نیست.') ?></div>
                 </div>
             </div>
         <?php
@@ -310,10 +321,10 @@ class Person extends Main
     {
         $month = getMonth();
         $day = getDay();
-        $day2=str_pad($day,2,0,STR_PAD_LEFT);
-        $month2=str_pad($month,2,0,STR_PAD_LEFT);
+        $day2 = str_pad($day, 2, 0, STR_PAD_LEFT);
+        $month2 = str_pad($month, 2, 0, STR_PAD_LEFT);
         $people = Person::where('shamsi_birth', 'like', '____/' . $month . '/' . $day)
-        ->orWhere('shamsi_birth', 'like', '____/' . $month2 . '/' . $day2)->count();
+            ->orWhere('shamsi_birth', 'like', '____/' . $month2 . '/' . $day2)->count();
         return $people;
     }
 
@@ -342,7 +353,7 @@ class Person extends Main
             <div class="row">
                 <div class="col-12 text-center">
                     <button type="button" id="store-birthday" class="btn btn-success me-sm-3 me-1">ذخیره تغییرات</button>
-                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close"><?=__('انصراف')?></button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close"><?= __('انصراف') ?></button>
                 </div>
             </div>
         </div>
