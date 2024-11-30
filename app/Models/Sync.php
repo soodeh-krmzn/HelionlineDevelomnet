@@ -11,7 +11,6 @@ class Sync extends Main
 
     public static function logSync(array $data)
     {
-        // Handle the 'm_uuid' field only if it exists
         self::updateOrCreate(
             [
                 'model' => $data['model'],

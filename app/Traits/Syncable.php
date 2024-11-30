@@ -26,16 +26,17 @@ trait Syncable
 
     public function syncLog()
     {
+        if (get_class($this) === 'App\Models\Game' && $this->status == 0) {
+            return;
+        }
         $syncData = [
             'model' => get_class($this),
             'm_id' => $this->id,
             'status' => '0',
         ];
-
         if (array_key_exists('uuid', $this->attributes)) {
             $syncData['m_uuid'] = $this->uuid;
         }
-
         Sync::logSync($syncData);
     }
 
