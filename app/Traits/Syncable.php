@@ -29,6 +29,11 @@ trait Syncable
         if (get_class($this) === 'App\Models\Game' && $this->status == 0) {
             return;
         }
+
+        if (get_class($this) === 'App\Models\GameMeta' && is_null($this->end)) {
+            return;
+        }
+        
         $syncData = [
             'model' => get_class($this),
             'm_id' => $this->id,
