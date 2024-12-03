@@ -15,7 +15,7 @@ class UserActivity extends Main
     use HasFactory, SoftDeletes;
     use Syncable;
 
-    protected $fillable = ['user_id', 'in', 'out'];
+    protected $fillable = ['user_id', 'uuid', 'in', 'out'];
 
     public function user()
     {
