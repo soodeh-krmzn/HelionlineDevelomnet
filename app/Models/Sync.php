@@ -11,7 +11,7 @@ class Sync extends Main
 
     public static function logSync(array $data)
     {
-        self::updateOrCreate(
+        self::firstOrCreate(
             [
                 'model' => $data['model'],
                 'm_id' => $data['m_id'],
