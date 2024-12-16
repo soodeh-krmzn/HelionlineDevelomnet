@@ -5,13 +5,25 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\MyModels\Main;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Syncable;
+use Illuminate\Support\Str;
 
 class EditReport extends Main
 {
     use HasFactory;
+    use Syncable;
 
     protected $fillable = ["user_id", "edited_type", "edited_id", "details"];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
+    }
+    
     public $models = [
         'charge' => 'App\Models\Person',
         'game' => 'App\Models\Game',
