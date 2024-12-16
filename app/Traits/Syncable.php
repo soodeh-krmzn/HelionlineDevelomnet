@@ -40,6 +40,10 @@ trait Syncable
         if (get_class($this) === 'App\Models\Factor' && $this->closed == 0) {
             return;
         }
+        
+        if (get_class($this) === 'App\Models\CounterItem' && $this->end == 0) {
+            return;
+        }
 
         $syncData = [
             'model' => get_class($this),
