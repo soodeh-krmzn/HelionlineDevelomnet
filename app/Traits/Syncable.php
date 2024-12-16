@@ -7,24 +7,27 @@ use Illuminate\Support\Str;
 
 trait Syncable
 {
-    protected static $syncing = false;
-
+    protected static $syncing = true;
+    public static function disableSyncLog()
+    {
+        self::$syncing = false;
+    }
     public static function bootSyncable()
     {
         static::created(function ($model) {
-            if (!self::$syncing) {
-                $model->syncLog();
+            if (self::$syncing) {
+                $model->syncLog(true);
             }
         });
 
         static::updated(function ($model) {
-            if (!self::$syncing) {
-                $model->syncLog();
+            if (self::$syncing) {
+                $model->syncLog(false);
             }
         });
     }
 
-    public function syncLog()
+    public function syncLog($isCreating)
     {
         if (get_class($this) === 'App\Models\Game' && $this->status == 0) {
             return;
@@ -33,25 +36,32 @@ trait Syncable
         if (get_class($this) === 'App\Models\GameMeta' && is_null($this->end)) {
             return;
         }
-        
+
+        if (get_class($this) === 'App\Models\Factor' && $this->closed == 0) {
+            return;
+        }
+
         $syncData = [
             'model' => get_class($this),
+            'is_created' => $isCreating ? 1 : 0,
             'm_id' => $this->id,
             'status' => '0',
         ];
+
         if (array_key_exists('uuid', $this->attributes)) {
             $syncData['m_uuid'] = $this->uuid;
         }
+
         Sync::logSync($syncData);
     }
 
     public static function withoutSyncing(callable $callback)
     {
-        self::$syncing = true;
+        self::$syncing = false;
         try {
             $callback();
         } finally {
-            self::$syncing = false;
+            self::$syncing = true;
         }
     }
 }
