@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->unsignedBigInteger('user_id')->comment('کد کاربر');
             $table->unsignedBigInteger('person_id')->comment('کد شخص');
             $table->foreign('person_id')->references('id')->on('people');

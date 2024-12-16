@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('person_metas', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->unsignedBigInteger('p_id');
             $table->foreign('p_id')->references('id')->on('people');
             $table->string('meta');

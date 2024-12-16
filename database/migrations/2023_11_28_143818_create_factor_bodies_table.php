@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('factor_bodies', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->unsignedBigInteger('factor_id');
             $table->foreign('factor_id')->references('id')->on('factors');
             $table->unsignedBigInteger('product_id');

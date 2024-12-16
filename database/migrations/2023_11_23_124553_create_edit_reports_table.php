@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('edit_reports', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->unsignedBigInteger('user_id');
             $table->string('edited_type');
             $table->unsignedBigInteger('edited_id');
