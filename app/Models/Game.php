@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Syncable;
+use Illuminate\Support\Str;
 
 class Game extends Main
 {
@@ -22,7 +23,14 @@ class Game extends Main
 
     protected $guarded = [];
 
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
+    }
 
     public function adjective_values()
     {
@@ -61,7 +69,7 @@ class Game extends Main
     {
         return $this->belongsTo(Section::class);
     }
-   
+
     public function payments()
     {
         return $this->morphMany(Payment::class, 'object');
@@ -236,9 +244,9 @@ class Game extends Main
     {
         $counter = $this->counter;
         if (is_null($counter)) {
-            return '<span class="badge bg-danger">'.__('ندارد').'</span>';
+            return '<span class="badge bg-danger">' . __('ندارد') . '</span>';
         } else {
-            return '<span class="badge bg-success">'.__('دارد').'</span>';
+            return '<span class="badge bg-success">' . __('دارد') . '</span>';
         }
     }
 
@@ -367,8 +375,8 @@ class Game extends Main
                     <div class="row">
                         <div class="col-lg-3 col-sm-6 mb-3">
                             <label class="form-label"><?php echo __('زمان ورود') ?></label>
-                            <input type="text" readonly id="in-dateTime" data-id="in" class="form-control datetime-mask-current" placeholder="<?=__('زمان حال')?>">
-                            <input type="text" readonly value="<?=CurrentTime()?>" data-id="in" class="form-control datetime-mask-custome" style="display:none" placeholder="<?=__('زمان حال')?>">
+                            <input type="text" readonly id="in-dateTime" data-id="in" class="form-control datetime-mask-current" placeholder="<?= __('زمان حال') ?>">
+                            <input type="text" readonly value="<?= CurrentTime() ?>" data-id="in" class="form-control datetime-mask-custome" style="display:none" placeholder="<?= __('زمان حال') ?>">
                             <input type="hidden" id="in-dateTime-value">
                             <div class="invalid-feedback" data-id="in" data-error="checkEmpty"></div>
                         </div>
@@ -703,7 +711,7 @@ class Game extends Main
         $m = (($setting->getSetting('load_game_type') == 'modal') || ($setting->getSetting('load_game_type') == ''));
         if ($m) { ?>
             <button type="button" id="close-game-modal" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
-            <button type="button" id="delete-game" data-id="<?=$game->id?>" class="btn btn-sm btn-danger">
+            <button type="button" id="delete-game" data-id="<?= $game->id ?>" class="btn btn-sm btn-danger">
                 <i class="bx bx-trash"></i>
             </button>
             <div class="modal-body table-responsive">
@@ -723,7 +731,7 @@ class Game extends Main
                         </h3>
                     </div>
                 </div>
-                <?php if (strpos('data-cke-filler="true"',$bill_header=$setting->getSetting('bill_header'))) { ?>
+                <?php if (strpos('data-cke-filler="true"', $bill_header = $setting->getSetting('bill_header'))) { ?>
                     <div class="row mx-0 mb-3 bill-header">
                         <div class="col-12">
                             <p class="text-center my-auto"><?php echo $bill_header ?></p>
@@ -931,7 +939,7 @@ class Game extends Main
                                                 <?php } ?>
                                             </select>
                                         </div>
-                                        <button class="btn btn-warning no-print update-deposit btn-sm"><?=__('اعمال')?></button>
+                                        <button class="btn btn-warning no-print update-deposit btn-sm"><?= __('اعمال') ?></button>
                                     </div>
                                     <h4 class="m-0 just-print"><?php echo cnf($game->deposit) ?></h4>
                                 </td>
@@ -1378,7 +1386,7 @@ class Game extends Main
                         <select name="" id="section-id" data-id="section-id" class="form-select checkEmpty">
                             <?php
                             foreach ($section->getSelect() as $sectionRow) { ?>
-                                <option <?=$this->section_id==$sectionRow->id?'selected':'' ?> value="<?php echo $sectionRow->id; ?>"><?php echo $sectionRow->name; ?></option>
+                                <option <?= $this->section_id == $sectionRow->id ? 'selected' : '' ?> value="<?php echo $sectionRow->id; ?>"><?php echo $sectionRow->name; ?></option>
                             <?php
                             }
                             ?>

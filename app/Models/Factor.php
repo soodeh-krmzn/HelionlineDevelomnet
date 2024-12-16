@@ -7,6 +7,7 @@ use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Syncable;
+use Illuminate\Support\Str;
 
 class Factor extends Main
 {
@@ -14,6 +15,15 @@ class Factor extends Main
     use Syncable;
 
     protected $guarded = [];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
+    }
 
     public function bodies()
     {

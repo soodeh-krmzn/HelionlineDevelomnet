@@ -6,6 +6,7 @@ use App\Models\MyModels\Main;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Syncable;
+use Illuminate\Support\Str;
 
 class FactorBody extends Main
 {
@@ -13,6 +14,15 @@ class FactorBody extends Main
     use Syncable;
 
     protected $fillable = ['factor_id', 'product_id', 'product_name', 'product_price', 'product_buy_price', 'count', 'body_price', 'body_buy_price'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
+    }
 
     public function factor()
     {
