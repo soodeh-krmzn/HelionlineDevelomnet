@@ -702,31 +702,3 @@ if (typeof $ !== "undefined") {
         }
     });
 }
-
-$(document.body).on("change", ".status-offline", function() {  
-    console.log("test");
-    var $this = $(this);
-    var status = $this.is(':checked');
-    if (status) {
-        Swal.fire({
-            title: 'آیا مطمئن هستید؟',
-            text: "فعال کردن حالت آفلاین!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'بله، فعال کن!',
-            cancelButtonText: 'لغو'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $("#loading").fadeIn();                        
-                setTimeout(function() {
-                    $("#loading").fadeOut();
-                    Swal.fire('فعال شد!', 'حالت آفلاین با موفقیت فعال شد.', 'success');
-                }, 2000);
-            } else {                        
-                $this.prop('checked', false);
-            }
-        });
-    }
-});
