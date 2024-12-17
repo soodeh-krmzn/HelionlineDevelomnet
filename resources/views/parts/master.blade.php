@@ -387,31 +387,34 @@
         });
     </script>
     <script>
-        $(document.body).on("change", ".status-offline", function() {
-            var $this = $(this);
-            var status = $this.is(':checked');
-            if (status) {
-                Swal.fire({
-                    title: 'آیا مطمئن هستید؟',
-                    text: "فعال کردن حالت آفلاین!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'بله، فعال کن!',
-                    cancelButtonText: 'لغو'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $("#loading").fadeIn();
-                        setTimeout(function() {
-                            $("#loading").fadeOut();
-                            Swal.fire('فعال شد!', 'حالت آفلاین با موفقیت فعال شد.', 'success');
-                        }, 2000);
-                    } else {
-                        $this.prop('checked', false);
-                    }
-                });
-            }
+        $(document).on("change", ".status-offline", function() {
+            let status = $(this).is(":checked") ? 1 : 0;
+
+            Swal.fire({
+                title: 'آیا مطمئن هستید؟',
+                text: "این کار حالت آفلاین را تغییر خواهد داد!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'بله',
+                cancelButtonText: 'لغو'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/offline/toggle',
+                        method: 'POST',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            offline_mode: status
+                        },
+                        success: function(response) {
+                            Swal.fire('انجام شد!', response.message, 'success');
+                        },
+                        error: function(xhr) {
+                            Swal.fire('خطا!', xhr.responseJSON.message, 'error');
+                        }
+                    });
+                }
+            });
         });
     </script>
     @yield('footer-scripts')

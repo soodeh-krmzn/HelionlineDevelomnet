@@ -57,7 +57,7 @@ use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\ExcelReportController;
 use App\Http\Controllers\PaymentTypeController;
 use App\Http\Controllers\CostCategoryController;
-
+use App\Http\Controllers\OfflineController;
 use App\Http\Controllers\UserActivityController;
 use App\Http\Controllers\VoteResponseController;
 use App\Http\Controllers\SmsPatternCategoryController;
@@ -554,6 +554,9 @@ Route::middleware(['auth', 'store-request', 'check-charge', 'visit-log'])->group
     //Excel Report
     Route::get('excelreport', [ExcelReportController::class, 'index'])->name('excelReport')->middleware('user-group');
     Route::get('table-excel-report', [ExcelReportController::class, 'dataTable'])->name('tableExcelReport');
+
+    //Offline toggle
+    Route::post('/offline/toggle', [OfflineController::class, 'toggle'])->name('offlineToggle');
 });
 
 Route::get('/transfer', function () {
