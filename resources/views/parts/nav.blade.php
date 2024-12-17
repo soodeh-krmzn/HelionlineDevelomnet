@@ -27,7 +27,7 @@
                             class="badge bg-success rounded-pill badge-notifications">{{ auth()->user()->account->unreadTickets() }}</span>
                     </a>
                 </li>
-                <li class="nav-item  me-2">
+                <li class="nav-item me-2">
                     <a href="https://helisystem.ir/payment/create/{{ auth()->user()->username }}/account">
                         <span
                             class="badge bg-{{ (new \App\Models\Setting())->getSetting('charge') <= 7 ? 'danger' : 'success' }}">
