@@ -15,19 +15,19 @@
                 <i class="bx bx-menu bx-sm"></i>
             </a>
         </div>
-        <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-            <label class="switch switch-success switch-lg">
-                <input type="checkbox" class="switch-input status-offline">
-                <span class="switch-toggle-slider">
-                    <span class="switch-on">
-                        <i class="bx bx-check"></i>
-                    </span>
-                    <span class="switch-off">
-                        <i class="bx bx-x"></i>
-                    </span>
-                </span>
-            </label>
+        <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">            
             <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <label class="switch switch-success switch-lg">
+                    <input type="checkbox" class="switch-input status-offline">
+                    <span class="switch-toggle-slider">
+                        <span class="switch-on">
+                            <i class="bx bx-check"></i>
+                        </span>
+                        <span class="switch-off">
+                            <i class="bx bx-x"></i>
+                        </span>
+                    </span>
+                </label>
                 <li class="nav-item  me-2">
                     <a href="{{ route('chat') }}">
                         <span class="badge bg-warning">
