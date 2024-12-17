@@ -69,6 +69,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/spinkit/spinkit.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <!-- Page CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/my-' . $dir . '-style.css') }}">
