@@ -77,5 +77,10 @@ class DemoSeeder extends Seeder
             'meta_key' => 'default_payment_type',
             'meta_value' => __('کارتخوان')
         ]);
+
+        DB::table('settings')->insert([
+            'meta_key' => 'offline_mode',
+            'meta_value' => __('0')
+        ]);
     }
 }
