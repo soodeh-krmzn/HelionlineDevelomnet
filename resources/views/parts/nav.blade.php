@@ -246,24 +246,30 @@
 </nav>
 @section('footer-scripts')
     <script type="text/javascript">
-        $(document.body).on("click", ".status-offline", function() {
+        $(document.body).on("change", ".status-offline", function() {
             var $this = $(this);
             var status = $this.is(':checked');
-            $("#loading").fadeOut();
-
-            var confirmationMessage = "آیا مطمئن هستید که می‌خواهید حالت آفلاین را فعال کنید؟";
             if (status) {
-                if (confirm(confirmationMessage)) {
-                    $("#loading").fadeIn();
-
-                    // انجام عملیات (اینجا می‌توانید درخواست AJAX ارسال کنید)
-                    setTimeout(function() {
-                        alert("حالت آفلاین فعال شد!");
-                        $("#loading").fadeOut(); 
-                    }, 2000); 
-                } else {
-                    $this.prop('checked', false);
-                }
+                Swal.fire({
+                    title: 'آیا مطمئن هستید؟',
+                    text: "فعال کردن حالت آفلاین!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'بله، فعال کن!',
+                    cancelButtonText: 'لغو'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#loading").fadeIn();                        
+                        setTimeout(function() {
+                            $("#loading").fadeOut();
+                            Swal.fire('فعال شد!', 'حالت آفلاین با موفقیت فعال شد.', 'success');
+                        }, 2000);
+                    } else {                        
+                        $this.prop('checked', false);
+                    }
+                });
             }
         });
     </script>
