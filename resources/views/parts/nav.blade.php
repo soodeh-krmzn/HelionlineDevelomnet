@@ -36,7 +36,20 @@
                         </span>
                     </a>
                 </li>
-                @if ((new \App\Models\Setting())->getSetting('sms_panel')==false)
+                <li class="nav-item me-2">
+                    <label class="switch switch-success switch-lg">
+                        <input type="checkbox" class="switch-input status-sms">
+                        <span class="switch-toggle-slider">
+                            <span class="switch-on">
+                                <i class="bx bx-check"></i>
+                            </span>
+                            <span class="switch-off">
+                                <i class="bx bx-x"></i>
+                            </span>
+                        </span>
+                    </label>
+                </li>
+                @if ((new \App\Models\Setting())->getSetting('sms_panel') == false)
                     <li class="nav-item me-2">
                         <a href="https://helisystem.ir/payment/create/{{ auth()->user()->username }}/sms">
                             <span
