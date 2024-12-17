@@ -17,7 +17,7 @@
         </div>
         <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">            
             <ul class="navbar-nav flex-row align-items-center ms-auto">
-                <label class="switch switch-success switch-lg">
+                <label class="switch switch-success switch-lg" style="margin-left:4rem">
                     <input type="checkbox" class="switch-input status-offline">
                     <span class="switch-toggle-slider">
                         <span class="switch-on">
