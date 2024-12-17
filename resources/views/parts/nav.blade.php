@@ -15,7 +15,7 @@
                 <i class="bx bx-menu bx-sm"></i>
             </a>
         </div>
-        <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">            
+        <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
             <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <label class="switch switch-success switch-lg mb-1" style="margin-left:4rem">
                     <input type="checkbox" class="switch-input status-offline">
@@ -244,4 +244,28 @@
         </div>
     </div>
 </nav>
-<!-- / Navbar -->
+@section('footer-scripts')
+    <script type="text/javascript">
+        $(document.body).on("click", ".status-offline", function() {
+            var $this = $(this);
+            var status = $this.is(':checked');
+            $("#loading").fadeOut();
+
+            var confirmationMessage = "آیا مطمئن هستید که می‌خواهید حالت آفلاین را فعال کنید؟";
+            if (status) {
+                if (confirm(confirmationMessage)) {
+                    $("#loading").fadeIn();
+
+                    // انجام عملیات (اینجا می‌توانید درخواست AJAX ارسال کنید)
+                    setTimeout(function() {
+                        alert("حالت آفلاین فعال شد!");
+                        $("#loading").fadeOut(); 
+                    }, 2000); 
+                } else {
+                    $this.prop('checked', false);
+                }
+            }
+        });
+    </script>
+@stop
+<!--/ Navbar -->
