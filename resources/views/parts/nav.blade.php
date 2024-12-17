@@ -17,8 +17,12 @@
         </div>
         <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
             <ul class="navbar-nav flex-row align-items-center ms-auto">
+                @php
+                    $isOffline = \App\Models\Setting::isOfflineMode();
+                @endphp
                 <label class="switch switch-success switch-lg mb-1" style="margin-left:4rem">
-                    <input type="checkbox" class="switch-input status-offline">
+                    <input type="checkbox" class="switch-input status-offline"
+                        @if ($isOffline) checked @endif>
                     <span class="switch-toggle-slider">
                         <span class="switch-on">
                             <i class="bx bx-check"></i>
