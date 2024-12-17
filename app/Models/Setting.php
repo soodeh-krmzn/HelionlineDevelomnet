@@ -31,4 +31,8 @@ class Setting extends Main
             return $today->diff($expire)->format('%R%a');
         // });
     }
+    public static function isOfflineMode()
+    {
+        return self::where('meta_key', 'offline_mode')->value('meta_value') == 1;
+    }
 }
