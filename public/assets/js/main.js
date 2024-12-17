@@ -703,7 +703,8 @@ if (typeof $ !== "undefined") {
     });
 }
 
-$(document.body).on("change", ".status-offline", function() {            
+$(document.body).on("change", ".status-offline", function() {  
+    console.log("test");
     var $this = $(this);
     var status = $this.is(':checked');
     if (status) {
