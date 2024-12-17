@@ -137,10 +137,16 @@ Route::middleware(['auth', 'store-request', 'check-charge', 'visit-log'])->group
 
     //Person
     Route::get('/person',  [PersonController::class, 'index'])->name('person')->middleware('user-group');
-    Route::post('/crud-person', [PersonController::class, 'crud'])->name('crudPerson');
+    Route::middleware('offline.mode')->group(function () {
+        Route::post('/crud-person', [PersonController::class, 'crud'])->name('crudPerson');
+    });
     Route::post('/store-person', [PersonController::class, 'store'])->name('storePerson');
-    Route::post('/edit-person', [PersonController::class, 'edit'])->name('editPerson');
-    Route::post('/delete-person', [PersonController::class, 'delete'])->name('deletePerson');
+    Route::middleware('offline.mode')->group(function () {
+        Route::post('/edit-person', [PersonController::class, 'edit'])->name('editPerson');
+    });
+    Route::middleware('offline.mode')->group(function () {
+        Route::post('/delete-person', [PersonController::class, 'delete'])->name('deletePerson');
+    });
     Route::post('/export-person', [PersonController::class, 'export'])->name('exportPerson');
     Route::get('/table-person', [PersonController::class, 'dataTable'])->name('tablePerson');
     Route::get('/report-person', [PersonController::class, 'report'])->name('reportPerson')->middleware('user-group');
@@ -566,4 +572,4 @@ Route::get('/transfer', function () {
         $t->shamsitoGregorian();
 })->middleware('auth');
 
-Route::get('/testt', [TestController::class,'test']);
+Route::get('/testt', [TestController::class, 'test']);

@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'check-charge' => \App\Http\Middleware\ChargeMiddleware::class,
         'user-group' => \App\Http\Middleware\UserGroup::class,
         'visit-log'=> \App\Http\Middleware\Visit::class,
+        'offline.mode' => \App\Http\Middleware\Offline::class,
     ];
 }
