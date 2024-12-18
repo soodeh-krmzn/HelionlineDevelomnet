@@ -5,12 +5,13 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\MyModels\Main;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Syncable;
 use Illuminate\Support\Str;
 
 class EditReport extends Main
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     use Syncable;
 
     protected $fillable = ["user_id", "edited_type", "edited_id", "details"];
@@ -23,7 +24,7 @@ class EditReport extends Main
             $model->uuid = (string) Str::uuid();
         });
     }
-    
+
     public $models = [
         'charge' => 'App\Models\Person',
         'game' => 'App\Models\Game',
@@ -31,7 +32,7 @@ class EditReport extends Main
         'offer' => 'App\Models\Offer',
         'package' => 'App\Models\Package',
         'product' => 'App\Models\Product',
-        'payment'=>'App\Models\Payment'
+        'payment' => 'App\Models\Payment'
     ];
 
     public function getEditedName()
@@ -83,47 +84,47 @@ class EditReport extends Main
 
     public function showIndex($model)
     {
-        $reports = EditReport::where('edited_type', $this->models[$model] )->get();
-        if($reports->count() > 0) {
-            ?>
+        $reports = EditReport::where('edited_type', $this->models[$model])->get();
+        if ($reports->count() > 0) {
+?>
             <table class="table table-hover border-top">
                 <thead>
-                <tr>
-                    <th><?=__('ردیف')?></th>
-                    <th>نام کاربر</th>
-                    <th><?php echo $this->getEditedNameLabel($this->models[$model]) ?></th>
-                    <th>کد</th>
-                    <th>تاریخ</th>
-                    <th><?=__('توضیحات')?></th>
-                </tr>
+                    <tr>
+                        <th><?= __('ردیف') ?></th>
+                        <th>نام کاربر</th>
+                        <th><?php echo $this->getEditedNameLabel($this->models[$model]) ?></th>
+                        <th>کد</th>
+                        <th>تاریخ</th>
+                        <th><?= __('توضیحات') ?></th>
+                    </tr>
                 </thead>
                 <tbody>
-            <?php
-            foreach($reports as $key => $report) {
-                ?>
-                <tr>
-                    <td><?php echo $key + 1; ?></td>
-                    <td><?php echo $report->user?->name ?></td>
-                    <td><?php echo $report->getEditedName() ?></td>
-                    <td><?php echo $report->edited_id ?></td>
-                    <td><?php echo timeFormat($report->created_at) ?></td>
-                    <td><?php echo $report->details ?></td>
-                    </td>
-                </tr>
-                <?php
-            }
-            ?>
+                    <?php
+                    foreach ($reports as $key => $report) {
+                    ?>
+                        <tr>
+                            <td><?php echo $key + 1; ?></td>
+                            <td><?php echo $report->user?->name ?></td>
+                            <td><?php echo $report->getEditedName() ?></td>
+                            <td><?php echo $report->edited_id ?></td>
+                            <td><?php echo timeFormat($report->created_at) ?></td>
+                            <td><?php echo $report->details ?></td>
+                            </td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
                 </tbody>
             </table>
-            <?php
+        <?php
         } else {
-            ?>
+        ?>
             <div class="row">
                 <div class="col-12">
-                    <div class="alert alert-danger text-center m-2"><?=__('موردی جهت نمایش موجود نیست.')?></div>
+                    <div class="alert alert-danger text-center m-2"><?= __('موردی جهت نمایش موجود نیست.') ?></div>
                 </div>
             </div>
-            <?php
+<?php
         }
     }
 }
