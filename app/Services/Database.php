@@ -53,22 +53,19 @@ class Database
     {
         // dd($this->db_pass,$this->db_name,$this->db_user);
 
-        // if ($this->db_name == "" || $this->db_user == "" || $this->db_pass == "") {
-        //     abort(500, "خطای پیکربندی! لطفا با پشتیبان سیستم تماس بگیرید.");
-        // }
+        if ($this->db_name == "" || $this->db_user == "" || $this->db_pass == "") {
+            abort(500, "خطای پیکربندی! لطفا با پشتیبان سیستم تماس بگیرید.");
+        }
 
-        // $decrypted = $this->decrypt();
+        $decrypted = $this->decrypt();
         // dd($decrypted['name'],$decrypted['user'],$decrypted['pass']);
         DB::purge('mysql');
         Config::set('database.connections.mysql', [
             'driver' => 'mysql',
             'host' => 'localhost',
-            // 'database' => $decrypted['name'],
-            // 'username' => $decrypted['user'],
-            // 'password' => $decrypted['pass'],
-            'database' => '3db',
-            'username' => '3user',
-            'password' => 'jVHRfOQnDQ3v',
+            'database' => $decrypted['name'],
+            'username' => $decrypted['user'],
+            'password' => $decrypted['pass'],
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
