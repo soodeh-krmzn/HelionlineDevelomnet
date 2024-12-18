@@ -15,31 +15,15 @@ class Database
     protected $db_user;
     protected $db_pass;
 
-    // public function __construct($db_name = null, $db_user = null, $db_pass = null)
-    // {
-    //     $this->db_name = $db_name ?? session('db_name');
-    //     $this->db_user = $db_user ?? session('db_user');
-    //     $this->db_pass = $db_pass ?? session('db_pass');
-    // }
+    public function __construct($db_name = null, $db_user = null, $db_pass = null)
+    {
+        $this->db_name = $db_name ?? session('db_name');
+        $this->db_user = $db_user ?? session('db_user');
+        $this->db_pass = $db_pass ?? session('db_pass');
+    }
 
     public function decrypt()
     {
-        // $key = base64_decode(Config::get('app.custom_key'));
-        // $encrypter = new Encrypter($key, Config::get('app.cipher'));
-
-        // // Test encryption
-        // $originalData = 'test data';
-        // $encryptedData = $encrypter->encryptString($originalData);
-
-        // // Test decryption
-        // $decryptedData = $encrypter->decryptString($encryptedData);
-        // abort(500, $originalData);
-        // echo "Original: $originalData\n";
-        // echo "Encrypted: $encryptedData\n";
-        // echo "Decrypted: $decryptedData\n";
-
-
-
         $key = base64_decode(Config::get('app.custom_key'));
         $encrypter = new Encrypter($key, Config::get('app.cipher'));
         $name = $encrypter->decryptString($this->db_name);
@@ -58,7 +42,6 @@ class Database
         }
 
         $decrypted = $this->decrypt();
-        dd($decrypted['name'],$decrypted['user'],$decrypted['pass']);
         DB::purge('mysql');
         Config::set('database.connections.mysql', [
             'driver' => 'mysql',
