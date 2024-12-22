@@ -6,6 +6,7 @@ use App\Models\MyModels\Main;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Syncable;
+use Illuminate\Support\Str;
 
 class Product extends Main
 {
@@ -13,6 +14,15 @@ class Product extends Main
     use Syncable;
 
     protected $fillable = ['id', 'name', 'stock', 'buy', 'sale', 'cart', 'image', 'status'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
+    }
 
     public function categories()
     {

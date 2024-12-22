@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('name')->comment('نام کالا');
             $table->integer('stock')->length(11)->comment('موجودی');
             $table->double('buy')->comment('قیمت خرید');
