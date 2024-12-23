@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('game_metas', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->unsignedBigInteger('g_id')->comment('کد بازی');
             $table->foreign('g_id')->references('id')->on('games');
             $table->string('key')->comment('کلید متای بازی');

@@ -11,10 +11,13 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Syncable;
+
 
 class PaymentType extends Main
 {
     use HasFactory, SoftDeletes;
+    use Syncable;
 
     protected $fillable = ['name', 'label', 'details', 'status', 'club'];
 
