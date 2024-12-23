@@ -13,7 +13,7 @@ class Product extends Main
     use HasFactory, SoftDeletes;
     use Syncable;
 
-    protected $fillable = ['id', 'name', 'stock', 'buy', 'sale', 'cart', 'image', 'status'];
+    protected $fillable = ['id','uuid', 'name', 'stock', 'buy', 'sale', 'cart', 'image', 'status'];
 
     protected static function boot()
     {
