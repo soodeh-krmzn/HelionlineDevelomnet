@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Str;
+
 
 class DemoSeeder extends Seeder
 {
@@ -23,16 +25,19 @@ class DemoSeeder extends Seeder
         ]);
 
         DB::table('products')->insert([[
+            'uuid' => (string) str::uuid(),
             'name' => __('کیک'),
             'stock' => 10,
             'buy' => 5000,
             'sale' => 8000,
         ], [
+            'uuid' => (string) str::uuid(),
             'name' => __('بستنی'),
             'stock' => 10,
             'buy' => 8000,
             'sale' => 10000,
         ], [
+            'uuid' => (string) str::uuid(),
             'name' => __('کلوچه'),
             'stock' => 10,
             'buy' => 10000,
