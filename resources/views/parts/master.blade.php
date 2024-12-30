@@ -423,6 +423,7 @@
                 url: "{{ route('licenseShow') }}",
                 type: "GET",
                 success: function(data) {
+                    console.log(data);
                     $("#license-result").html(data);
                 },
                 error: function(data) {
