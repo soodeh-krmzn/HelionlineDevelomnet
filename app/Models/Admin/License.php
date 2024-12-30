@@ -13,7 +13,7 @@ class License extends Admin
 {
     use HasFactory, SoftDeletes;
 
-    public function licenseStatus()
+    public static function licenseStatus()
     {
         $licesne = License::where('account_id', auth()->user()->account_id)->first();
         if ($licesne) {
@@ -25,7 +25,7 @@ class License extends Admin
         }
     }
 
-    public function licenseActivate()
+    public static function licenseActivate()
     {
         $licesne = License::where('account_id', auth()->user()->account_id)->first();
         if ($licesne) {
@@ -37,7 +37,7 @@ class License extends Admin
         }
     }
 
-    public function licenseActivateUser()
+    public static function licenseActivateUser()
     {
         $licesne = License::where('account_id', auth()->user()->account_id)->first();
         if ($licesne) {
