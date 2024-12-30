@@ -84,7 +84,7 @@ class License extends Admin
                                 <?php
                                 $user = User::find($license->user_active);
                                 if ($user) {
-                                    echo '<span class="badge bg-slack rounded-pill p-3"><i class="bi bi-person"></i> ' . $user->getFullName() . '</span>';
+                                    echo '<span class="badge bg-primary"><i class="bi bi-person"></i> ' . $user->getFullName() . '</span>';
                                 } else {
                                     echo '_';
                                 }
