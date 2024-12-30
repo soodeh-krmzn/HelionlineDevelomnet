@@ -264,39 +264,10 @@
 </nav>
 <!--/ Navbar -->
 
-<div class="modal-header">
-    <h5 class="modal-title" id="licenseModalLabel">لیست لایسنس‌ها و کاربران</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="بستن"></button>
-</div>
-<div class="modal-body">
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>{{ __('ردیف') }}</th>
-                <th>{{ __('مجوز عبور') }}</th>
-                <th>{{ __('وضعیت') }}</th>
-                <th>{{ __('کاربر فعال') }}</th>
-                <th>{{ __('وضعیت فعالیت') }}</th>
-            </tr>
-        </thead>
-        <tbody id="licenseTableBody">
-            @foreach ($licenses as $index => $license)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $license->license }}</td>
-                    <td>{{ $license->status ? 'فعال' : 'غیرفعال' }}</td>
-                    <td>
-                        @php
-                            $user = \App\Models\User::find($license->user_active);
-                        @endphp
-                        {{ $user ? $user->getFullName() : '_' }}
-                    </td>
-                    <td>{{ $license->is_active ? 'در حال استفاده' : 'خاموش' }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+<div class="modal fade" id="licesne" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3 p-md-5">
+            <div id="licesne-result"></div>
+        </div>
+    </div>
 </div>

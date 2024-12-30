@@ -424,7 +424,6 @@
                 type: "GET",
                 success: function(data) {
                     $("#license-result").html(data);
-                    $("#license-modal").modal("show");
                 },
                 error: function(data) {
                     Swal.fire({
