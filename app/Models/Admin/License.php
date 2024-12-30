@@ -89,8 +89,8 @@ class License extends Admin
                                 }
                                 ?>
                             </td>
-                            <td class="<?php echo $license->is_active ? 'text-primary' : 'text-success'; ?>">
-                                <?php echo $license->is_active ? 'خاموش' : 'در حال استفاده'; ?>
+                            <td class="<?php echo $license->is_active == 0 ? 'text-primary' : 'text-success'; ?>">
+                                <?php echo $license->is_active == 0 ? 'خاموش' : 'در حال استفاده'; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
