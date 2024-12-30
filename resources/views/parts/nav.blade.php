@@ -22,7 +22,7 @@
                 @endphp
                 @if ($isOffline)
                     <li class="nav-item me-3 me-xl-2">
-                        <button type="button" class="btn btn-sm btn-label-primary license-modal-btn">
+                        <button type="button" class="btn btn-sm btn-label-slack license-modal-btn">
                             <i class='bx bx-wifi me-1'></i>حالت آفلاین: فعال
                         </button>
                     </li>
