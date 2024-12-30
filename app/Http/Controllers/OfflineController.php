@@ -36,4 +36,9 @@ class OfflineController extends Controller
             ]);
         }
     }
+    public function licenseShow()
+    {
+        $license = new License();
+        return $license->showLicense();
+    }
 }

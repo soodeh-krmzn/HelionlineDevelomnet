@@ -653,5 +653,8 @@
     "احراز شماره موبایل": "Verification of Mobile",
     "کد احراز شماره موبایل برای شما پیامک شد.": "Mobile Verification Code has been Sent to You.",
     "احراز شماره موبایل با موفقیت انجام و رمز جدید برای شما پیامک شد.": "The Verification of the Mobile was Successfully Completed and the New Password was Sent to You via SMS.",
-    "اطلاعات تکمیلی شخص": "Additional information of the person"
+    "اطلاعات تکمیلی شخص": "Additional information of the person",
+    "مجوز عبور": "License",
+    "کاربر فعال": "User Active",
+    "وضعیت فعالیت": "Activation"
   }

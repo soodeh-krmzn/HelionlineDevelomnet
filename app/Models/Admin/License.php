@@ -29,7 +29,7 @@ class License extends Admin
     {
         $licesne = License::where('account_id', auth()->user()->account_id)->first();
         if ($licesne) {
-            if ($licesne->isActive == 1) {
+            if ($licesne->is_active == 1) {
                 return true;
             } else {
                 return false;
@@ -41,21 +41,63 @@ class License extends Admin
     {
         $licesne = License::where('account_id', auth()->user()->account_id)->first();
         if ($licesne) {
-            if ($licesne->isActive == 1 && $licesne->userActive != null) {
-                return User::where('id', $licesne->userActive)->first();
+            if ($licesne->is_active == 1 && $licesne->user_active != null) {
+                return User::where('id', $licesne->user_active)->first();
             } else {
                 return false;
             }
         }
     }
 
+    public function showLicense()
+    {
+        $licenses = License::where('account_id', auth()->user()->account_id)->get();
+?>
+        <div class="modal-header">
+            <h5 class="modal-title" id="licenseModalLabel">لیست لایسنس‌ها و کاربران</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="بستن"></button>
+        </div>
+        <div class="modal-body">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th><?= __('ردیف') ?></th>
+                        <th><?= __('مجوز عبور') ?></th>
+                        <th><?= __('وضعیت') ?></th>
+                        <th><?= __('کاربر فعال') ?></th>
+                        <th><?= __('وضعیت فعالیت') ?></th>
+                    </tr>
+                </thead>
+                <tbody id="licenseTableBody">
+                    <?php foreach ($licenses as $index => $license): ?>
+                        <tr>
+                            <td><?php echo $index + 1; ?></td>
+                            <td><?php echo $license->license; ?></td>
+                            <td><?php echo $license->status; ?></td>
+                            <td><?php
+                                $user = User::find($license->user_active);
+                                echo $user ? $user->getFullName() : '_';
+                                ?>
+                            </td>
+                            <td><?php echo $license->is_active ? 'در حال استفاده' : 'خاموش'; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+        </div>
+<?php
+    }
+
     // public function licenseChangeActivate()
     // {
     //     $licesne = License::where('account_id', auth()->user()->account_id)->first();
     //     if ($licesne) {
-    //         if ($licesne->isActive == 1) {
-    //             $licesne->isActive = 0;
-    //             $licesne->userActive = null;
+    //         if ($licesne->is_active == 1) {
+    //             $licesne->is_active = 0;
+    //             $licesne->user_active = null;
     //         } else {
     //             return false;
     //         }

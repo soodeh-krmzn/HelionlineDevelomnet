@@ -22,17 +22,18 @@
                 @endphp
                 @if ($isOffline)
                     <li class="nav-item me-3 me-xl-2">
-                        <button type="button" class="btn btn-sm btn-label-primary">
+                        <button type="button" class="btn btn-sm btn-label-primary" id="license-modal-btn">
                             <i class='bx bx-wifi me-1'></i>حالت آفلاین: فعال
                         </button>
                     </li>
                 @else
                     <li class="nav-item me-3 me-xl-2">
-                        <button type="button" class="btn btn-sm btn-label-secondary">
+                        <button type="button" class="btn btn-sm btn-label-secondary" id="license-modal-btn">
                             <i class='bx bx-wifi-off me-1'></i>حالت آفلاین: غیر فعال
                         </button>
                     </li>
                 @endif
+
                 {{-- <label class="switch switch-success switch-lg mb-1" style="margin-left:4rem">
                     <input type="checkbox" class="switch-input status-offline"
                         @if ($isOffline) checked @endif>
@@ -262,3 +263,40 @@
     </div>
 </nav>
 <!--/ Navbar -->
+
+<div class="modal-header">
+    <h5 class="modal-title" id="licenseModalLabel">لیست لایسنس‌ها و کاربران</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="بستن"></button>
+</div>
+<div class="modal-body">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>{{ __('ردیف') }}</th>
+                <th>{{ __('مجوز عبور') }}</th>
+                <th>{{ __('وضعیت') }}</th>
+                <th>{{ __('کاربر فعال') }}</th>
+                <th>{{ __('وضعیت فعالیت') }}</th>
+            </tr>
+        </thead>
+        <tbody id="licenseTableBody">
+            @foreach ($licenses as $index => $license)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $license->license }}</td>
+                    <td>{{ $license->status ? 'فعال' : 'غیرفعال' }}</td>
+                    <td>
+                        @php
+                            $user = \App\Models\User::find($license->user_active);
+                        @endphp
+                        {{ $user ? $user->getFullName() : '_' }}
+                    </td>
+                    <td>{{ $license->is_active ? 'در حال استفاده' : 'خاموش' }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+</div>

@@ -555,8 +555,9 @@ Route::middleware(['auth', 'store-request', 'check-charge', 'visit-log'])->group
     Route::get('excelreport', [ExcelReportController::class, 'index'])->name('excelReport')->middleware('user-group');
     Route::get('table-excel-report', [ExcelReportController::class, 'dataTable'])->name('tableExcelReport');
 
-    //Offline toggle
+    //Offline toggle - License
     // Route::post('/offline/toggle', [OfflineController::class, 'toggle'])->name('offlineToggle');
+    Route::get('/license-show', [OfflineController::class, 'licenseShow'])->name('licenseShow');
 });
 
 Route::get('/transfer', function () {

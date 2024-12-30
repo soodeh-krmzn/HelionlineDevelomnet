@@ -417,6 +417,25 @@
             });
         });
     </script>
+    <script>
+        $(document).on("click", "#license-modal-btn", function() {
+            $.ajax({
+                url: "{{ route('licenseShow') }}",
+                type: "GET",
+                success: function(data) {
+                    $("#license-result").html(data);
+                    $("#license-modal").modal("show");
+                },
+                error: function(data) {
+                    Swal.fire({
+                        title: "{{ __('اخطار') }}",
+                        text: data.responseJSON.message,
+                        icon: "error"
+                    });
+                }
+            });
+        });
+    </script>
     @yield('footer-scripts')
 </body>
 
