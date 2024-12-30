@@ -75,7 +75,7 @@ class License extends Admin
                             <td><?php echo $index + 1; ?></td>
                             <td>
                                 <span title="<?php echo $license->license ?>">
-                                    <?php echo Str::limit($license->license, 20, '...') ?>
+                                    <?php echo Str::limit($license->license, 10, '...') ?>
                                 </span>
                             </td>
                             <td><?php echo $license->status; ?></td>
@@ -90,7 +90,7 @@ class License extends Admin
                                 ?>
                             </td>
                             <td class="<?php echo $license->is_active ? 'text-primary' : 'text-success'; ?>">
-                                <?php echo $license->is_active ? 'در حال استفاده' : 'خاموش'; ?>
+                                <?php echo $license->is_active ? 'خاموش' : 'در حال استفاده'; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
