@@ -20,7 +20,20 @@
                 @php
                     $isOffline = \App\Models\Admin\License::licenseActivate();
                 @endphp
-                <label class="switch switch-success switch-lg mb-1" style="margin-left:4rem">
+                @if ($isOffline)
+                    <li class="nav-item me-3 me-xl-2">
+                        <button type="button" class="btn btn-sm btn-label-primary">
+                            <i class='bx bx-wifi me-1'></i>حالت آفلاین: فعال
+                        </button>
+                    </li>
+                @else
+                    <li class="nav-item me-3 me-xl-2">
+                        <button type="button" class="btn btn-sm btn-label-secondary">
+                            <i class='bx bx-wifi-off me-1'></i>حالت آفلاین: غیر فعال
+                        </button>
+                    </li>
+                @endif
+                {{-- <label class="switch switch-success switch-lg mb-1" style="margin-left:4rem">
                     <input type="checkbox" class="switch-input status-offline"
                         @if ($isOffline) checked @endif>
                     <span class="switch-toggle-slider">
@@ -31,7 +44,7 @@
                             <i class="bx bx-x"></i>
                         </span>
                     </span>
-                </label>
+                </label> --}}
                 <li class="nav-item  me-2">
                     <a href="{{ route('chat') }}">
                         <span class="badge bg-warning">
