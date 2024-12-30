@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class License extends Admin
 {
@@ -72,7 +73,11 @@ class License extends Admin
                     <?php foreach ($licenses as $index => $license): ?>
                         <tr>
                             <td><?php echo $index + 1; ?></td>
-                            <td><?php echo $license->license; ?></td>
+                            <td>
+                                <span title="<?php $license->license ?>">
+                                    <?php Str::limit($license->license, 20, '...') ?>
+                                </span>
+                            </td>
                             <td><?php echo $license->status; ?></td>
                             <td><?php
                                 $user = User::find($license->user_active);
