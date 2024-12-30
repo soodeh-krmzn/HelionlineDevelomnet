@@ -423,8 +423,8 @@
                 url: "{{ route('licenseShow') }}",
                 type: "GET",
                 success: function(data) {
-                    console.log(data);
                     $("#license-result").html(data);
+                    $("#licesne").modal('show');
                 },
                 error: function(data) {
                     Swal.fire({
