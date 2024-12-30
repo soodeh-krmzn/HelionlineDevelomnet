@@ -55,7 +55,7 @@ class License extends Admin
         $licenses = License::where('account_id', auth()->user()->account_id)->get();
 ?>
         <div class="modal-header">
-            <h5 class="modal-title" id="licenseModalLabel">لیست لایسنس‌ها و کاربران</h5>
+            <h5 class="modal-title" id="licenseModalLabel">مجوز های عبور</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="بستن"></button>
         </div>
         <div class="modal-body">
@@ -74,24 +74,28 @@ class License extends Admin
                         <tr>
                             <td><?php echo $index + 1; ?></td>
                             <td>
-                                <span title="<?php $license->license ?>">
-                                    <?php Str::limit($license->license, 20, '...') ?>
+                                <span title="<?php echo $license->license ?>">
+                                    <?php echo Str::limit($license->license, 20, '...') ?>
                                 </span>
                             </td>
                             <td><?php echo $license->status; ?></td>
-                            <td><?php
+                            <td>
+                                <?php
                                 $user = User::find($license->user_active);
-                                echo $user ? $user->getFullName() : '_';
+                                if ($user) {
+                                    echo '<span class="badge bg-primary"><i class="bi bi-person"></i> ' . $user->getFullName() . '</span>';
+                                } else {
+                                    echo '_';
+                                }
                                 ?>
                             </td>
-                            <td><?php echo $license->is_active ? 'در حال استفاده' : 'خاموش'; ?></td>
+                            <td class="<?php echo $license->is_active ? 'text-primary' : 'text-success'; ?>">
+                                <?php echo $license->is_active ? 'در حال استفاده' : 'خاموش'; ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
         </div>
 <?php
     }
