@@ -556,7 +556,7 @@ Route::middleware(['auth', 'store-request', 'check-charge', 'visit-log'])->group
     Route::get('table-excel-report', [ExcelReportController::class, 'dataTable'])->name('tableExcelReport');
 
     //Offline toggle
-    Route::post('/offline/toggle', [OfflineController::class, 'toggle'])->name('offlineToggle');
+    // Route::post('/offline/toggle', [OfflineController::class, 'toggle'])->name('offlineToggle');
 });
 
 Route::get('/transfer', function () {
