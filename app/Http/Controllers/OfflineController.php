@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin\License;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 
@@ -19,5 +20,20 @@ class OfflineController extends Controller
         return response()->json([
             'message' => $offlineMode ? 'حالت آفلاین فعال شد.' : 'حالت آفلاین غیرفعال شد.',
         ]);
+    }
+
+    public function licesneActivateCheck()
+    {
+        $license = new License();
+        $licesneIsActive = $license->licenseActivate();
+        if ($licesneIsActive) {
+            return response()->json([
+                'message' => 'لایسنس فعال است.',
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'لایسنس غیرفعال است.',
+            ]);
+        }
     }
 }
