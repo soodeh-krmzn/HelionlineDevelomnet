@@ -78,7 +78,8 @@ class License extends Admin
                                     <?php echo Str::limit($license->license, 10, '...') ?>
                                 </span>
                             </td>
-                            <td><?php echo $license->status; ?></td>
+                            <td class="<?php echo $license->is_active == 0 ? 'text-danger' : 'text-success'; ?>">
+                                <?php echo $license->status == 0 ? "غیر فعال" : "فعال"; ?></td>
                             <td>
                                 <?php
                                 $user = User::find($license->user_active);

@@ -265,7 +265,7 @@
 <!--/ Navbar -->
 
 <div class="modal fade" id="licesne" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content p-3">
             <div id="license-result"></div>
         </div>
