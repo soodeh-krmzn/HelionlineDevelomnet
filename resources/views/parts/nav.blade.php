@@ -267,7 +267,7 @@
 <div class="modal fade" id="licesne" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content p-3 p-md-5">
-            <div id="licesne-result"></div>
+            <div id="license-result"></div>
         </div>
     </div>
 </div>

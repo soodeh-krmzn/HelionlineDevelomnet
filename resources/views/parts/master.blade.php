@@ -419,7 +419,6 @@
     </script>
     <script>
         $(document).on("click", ".license-modal-btn", function() {
-            console.log("clicked");
             $.ajax({
                 url: "{{ route('licenseShow') }}",
                 type: "GET",
