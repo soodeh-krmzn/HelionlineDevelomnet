@@ -26,16 +26,25 @@ class License extends Admin
         }
     }
 
+    // public static function licenseActivate()
+    // {
+    //     $licesne = License::where('account_id', auth()->user()->account_id)->first();
+    //     if ($licesne) {
+    //         if ($licesne->is_active == 1) {
+    //             return true;
+    //         } else {
+    //             return false;
+    //         }
+    //     }
+    // }
+
     public static function licenseActivate()
     {
-        $licesne = License::where('account_id', auth()->user()->account_id)->first();
-        if ($licesne) {
-            if ($licesne->is_active == 1) {
-                return true;
-            } else {
-                return false;
-            }
-        }
+        $hasActiveLicense = License::where('account_id', auth()->user()->account_id)
+            ->where('is_active', 1)
+            ->exists();
+
+        return !$hasActiveLicense;
     }
 
     public static function licenseActivateUser()
