@@ -17,7 +17,7 @@ class Offline
      */
     public function handle(Request $request, Closure $next)
     {
-        if (License::isOfflineMode()) {
+        if (License::licenseActivate()) {
             if ($request->isMethod('post') || $request->isMethod('put') || $request->isMethod('patch') || $request->isMethod('delete')) {
                 return response()->json([
                     'message' => 'حالت آفلاین فعال است. امکان ویرایش وجود ندارد.'
