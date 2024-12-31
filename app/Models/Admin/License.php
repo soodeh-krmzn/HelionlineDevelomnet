@@ -44,7 +44,7 @@ class License extends Admin
             ->where('is_active', 1)
             ->exists();
 
-        return !$hasActiveLicense;
+        return $hasActiveLicense;
     }
 
     public static function licenseActivateUser()

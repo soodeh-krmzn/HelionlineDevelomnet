@@ -7,8 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Jenssegers\Agent\Facades\Agent;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Setting;
-
+use App\Models\Admin\License;
 class Offline
 {
     /**
@@ -18,7 +17,7 @@ class Offline
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Setting::isOfflineMode()) {
+        if (License::isOfflineMode()) {
             if ($request->isMethod('post') || $request->isMethod('put') || $request->isMethod('patch') || $request->isMethod('delete')) {
                 return response()->json([
                     'message' => 'حالت آفلاین فعال است. امکان ویرایش وجود ندارد.'
