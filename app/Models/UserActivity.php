@@ -9,6 +9,7 @@ use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Syncable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class UserActivity extends Main
@@ -135,6 +136,7 @@ class UserActivity extends Main
     {
         $title = "تردد پرسنل";
         $menu = Menu::where('url', 'user-activity')->first();
+        Log::info($menu);
         if (auth()->user()->access == 1 || auth()->user()->group?->menus->contains($menu?->id)) {
             $users = User::getUsers();
         } else {
