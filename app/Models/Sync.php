@@ -11,15 +11,16 @@ class Sync extends Main
 
     public static function logSync(array $data)
     {
-        self::firstOrCreate(
-            [
-                'model' => $data['model'],
-                'm_id' => $data['m_id'],
-            ],
-            [
-                'm_uuid' => $data['m_uuid'] ?? null,
-                'status' => $data['status'],
-            ]
-        );
+        // self::firstOrCreate(
+        //     [
+        //         'model' => $data['model'],
+        //         'm_id' => $data['m_id'],
+        //     ],
+        //     [
+        //         'm_uuid' => $data['m_uuid'] ?? null,
+        //         'status' => $data['status'],
+        //     ]
+        // );
+        self::create($data);
     }
 }
