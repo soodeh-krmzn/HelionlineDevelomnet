@@ -51,7 +51,7 @@ class License extends Admin
     {
         $licesne = License::where('account_id', auth()->user()->account_id)->first();
         if ($licesne) {
-            if ($licesne->is_active == 1 && $licesne->user_active != null) {
+            if ($licesne->is_active == 1 && $licesne->user_active != 0) {
                 return User::where('id', $licesne->user_active)->first();
             } else {
                 return false;
