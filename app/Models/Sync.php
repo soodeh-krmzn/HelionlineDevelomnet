@@ -6,7 +6,7 @@ use App\Models\MyModels\Main;
 
 class Sync extends Main
 {
-    protected $fillable = ['m_uuid', 'm_id', 'model', 'status', 'is_created', 'user_id'];
+    protected $fillable = ['m_uuid', 'm_id', 'model', 'status', 'user_id'];
     protected $table = "sync";
 
     public static function logSync(array $data)
