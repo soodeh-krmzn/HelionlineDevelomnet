@@ -5,13 +5,22 @@ namespace App\Models;
 use App\Models\MyModels\Main;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Payment extends Main
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'person_id', 'price', 'details', 'type', 'object_type', 'object_id'];
+    protected $fillable = ['user_id','uuid', 'person_id', 'price', 'details', 'type', 'object_type', 'object_id'];
     protected $appends = ['person_name'];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
+    }
     public $types = [
         "game" => "بازی",
         "factor" => "فاکتور فروشگاه",
