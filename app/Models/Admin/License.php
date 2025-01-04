@@ -73,6 +73,7 @@ class License extends Admin
                     <tr>
                         <th><?= __('ردیف') ?></th>
                         <th><?= __('مجوز عبور') ?></th>
+                        <th><?= __('توضیحات') ?></th>
                         <th><?= __('وضعیت') ?></th>
                         <th><?= __('کاربر فعال') ?></th>
                         <th><?= __('وضعیت فعالیت') ?></th>
@@ -85,6 +86,11 @@ class License extends Admin
                             <td>
                                 <span title="<?php echo $license->license ?>">
                                     <?php echo Str::limit($license->license, 10, '...') ?>
+                                </span>
+                            </td>
+                            <td>
+                                <span title="<?php echo $license->detail ?>">
+                                    <?php echo $license->detail ?>
                                 </span>
                             </td>
                             <td class="<?php echo $license->status == 0 ? 'text-danger' : 'text-success'; ?>">
