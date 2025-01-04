@@ -50,6 +50,7 @@ trait Syncable
             'is_created' => $isCreating ? 1 : 0,
             'm_id' => $this->id,
             'status' => '0',
+            'user_id' => auth()->id(),
         ];
 
         if (array_key_exists('uuid', $this->attributes)) {

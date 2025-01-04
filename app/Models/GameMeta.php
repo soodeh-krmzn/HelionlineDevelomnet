@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
 use App\Traits\Syncable;
+use Illuminate\Support\Str;
 
 class GameMeta extends Main
 {
@@ -20,7 +21,14 @@ class GameMeta extends Main
     public static $normal_price;
     public static $vip_price;
     public static $totalPrice;
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
+    }
 
     public function changeKey()
     {
