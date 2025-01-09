@@ -7,10 +7,11 @@ use App\Models\MyModels\Main;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Syncable;
 
 class Setting extends Main
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Syncable;
 
     protected $fillable = ['meta_key', 'meta_value'];
 
