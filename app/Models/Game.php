@@ -28,7 +28,9 @@ class Game extends Main
         parent::boot();
 
         static::creating(function ($model) {
-            $model->uuid = (string) Str::uuid();
+            if (empty($model->uuid)) {
+                $model->uuid = (string) Str::uuid();
+            }
         });
     }
 
