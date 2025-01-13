@@ -17,6 +17,7 @@ return new class extends Migration
             $table->bigInteger('m_id');
             $table->string('model');
             $table->tinyInteger('status')->default(0);
+            $table->bigInteger('user_id')->nullable();
             $table->timestamps();
         });
     }
