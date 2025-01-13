@@ -578,7 +578,7 @@
             });
             makeTable();
 
-            $(document.body).on("click", "#crud-game", function() {
+            $(document.body).on("click", "#crud-game", function(e) {
                 if ($(this).hasClass('inactive')) {
                     e.preventDefault();
                     Swal.fire({
