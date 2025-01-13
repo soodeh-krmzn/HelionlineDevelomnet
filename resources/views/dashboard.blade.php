@@ -561,7 +561,7 @@
                 url: "{{ route('checkLicense') }}",
                 type: "GET",
                 success: function(response) {
-                    console.error("check license.");
+                    console.log(response);
                     if (response.isActive) {
                         $('#crud-game').prop('disabled', false);
                     } else {
