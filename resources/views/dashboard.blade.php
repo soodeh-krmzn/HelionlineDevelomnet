@@ -561,6 +561,7 @@
                 url: "{{ route('checkLicense') }}",
                 type: "GET",
                 success: function(response) {
+                    console.error("check license.");
                     if (response.isActive) {
                         $('#crud-game').prop('disabled', false);
                     } else {
@@ -581,7 +582,7 @@
                     console.error("مشکلی در بررسی وضعیت لایسنس به وجود آمد.");
                 }
             });
-            
+
             $(document.body).on("click", "#print-bill", function() {
                 let id = $(this).data('id');
                 let printTab = window.open('/print/' + id, '_blank');
