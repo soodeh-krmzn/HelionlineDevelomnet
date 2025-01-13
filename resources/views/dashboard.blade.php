@@ -84,8 +84,8 @@
                         <div class="card-body p-0">
                             <div class="row">
                                 <div class="col mx-2 my-2">
-                                    <button class="btn btn-success btn-lg w-100" id="crud-game" data-bs-toggle="modal"
-                                        data-bs-target="#crud" disabled>
+                                    <button class="btn btn-success btn-lg w-100 inactive" id="crud-game"
+                                        data-bs-toggle="modal" data-bs-target="#crud">
                                         <i class="bx bx-log-in"></i>
                                         <span>&nbsp;{{ __('messages.entrance') }}&nbsp;</span>
                                     </button>
@@ -562,19 +562,9 @@
                 type: "GET",
                 success: function(response) {
                     if (!response.isActive) {
-                        $('#crud-game').prop('disabled', false);
+                        $('#crud-game').removeClass('inactive');
                     } else {
-                        $('#crud-game').prop('disabled', true);
-
-                        $('#crud-game').on('click', function(e) {
-                            e.preventDefault();
-                            Swal.fire({
-                                title: 'خطا',
-                                text: 'در حالتی که آفلاین فعال باشد امکان ثبت ورود وجود ندارد.',
-                                icon: 'warning',
-                                confirmButtonText: 'باشه'
-                            });
-                        });
+                        $('#crud-game').addClass('inactive');
                     }
                 },
                 error: function() {
@@ -589,39 +579,49 @@
             makeTable();
 
             $(document.body).on("click", "#crud-game", function() {
-                $("#loading").fadeIn();
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('crudGame') }}",
-                    success: function(data) {
-                        $("#loading").fadeOut();
-                        $("#crud-result").html(data);
-                        $(".select2-g").select2({
-                            dropdownParent: $('#crud .modal-content')
-                        });
-                        $("#adjectives").select2({
-                            dropdownParent: $('#crud .modal-content'),
-                            placeholder: "@lang('جهت انتخاب امانتی ها کلیک کنید')..."
-                        });
-                        datetimeMask();
-                        const dateMask = document.querySelector('.date-mask');
-                        if (dateMask) {
-                            $(".date-mask").persianDatepicker({
-                                initialValue: false,
-                                observer: true,
-                                format: 'YYYY/MM/DD',
+                if ($(this).hasClass('inactive')) {
+                    Swal.fire({
+                        title: 'خطا',
+                        text: 'در حالتی که آفلاین فعال باشد امکان ثبت ورود وجود ندارد.',
+                        icon: 'warning',
+                        confirmButtonText: 'باشه'
+                    });
+                } else {
+                    $("#loading").fadeIn();
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('crudGame') }}",
+                        success: function(data) {
+                            $("#loading").fadeOut();
+                            $("#crud-result").html(data);
+                            $(".select2-g").select2({
+                                dropdownParent: $('#crud .modal-content')
+                            });
+                            $("#adjectives").select2({
+                                dropdownParent: $('#crud .modal-content'),
+                                placeholder: "@lang('جهت انتخاب امانتی ها کلیک کنید')..."
+                            });
+                            datetimeMask();
+                            const dateMask = document.querySelector('.date-mask');
+                            if (dateMask) {
+                                $(".date-mask").persianDatepicker({
+                                    initialValue: false,
+                                    observer: true,
+                                    format: 'YYYY/MM/DD',
+                                });
+                            }
+                        },
+                        error: function(data) {
+                            $("#loading").fadeOut();
+                            Swal.fire({
+                                title: "{{ __('اخطار') }}",
+                                text: data.responseJSON.message,
+                                icon: "error"
                             });
                         }
-                    },
-                    error: function(data) {
-                        $("#loading").fadeOut();
-                        Swal.fire({
-                            title: "{{ __('اخطار') }}",
-                            text: data.responseJSON.message,
-                            icon: "error"
-                        });
-                    }
-                });
+                    });
+                }
+
             });
 
             $(document.body).on("hidden.bs.modal", "#crud", function() {
