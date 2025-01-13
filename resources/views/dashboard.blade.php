@@ -580,6 +580,7 @@
 
             $(document.body).on("click", "#crud-game", function() {
                 if ($(this).hasClass('inactive')) {
+                    e.preventDefault();
                     Swal.fire({
                         title: 'خطا',
                         text: 'در حالتی که آفلاین فعال باشد امکان ثبت ورود وجود ندارد.',
