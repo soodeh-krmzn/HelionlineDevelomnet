@@ -625,9 +625,9 @@
 
             });
 
-            // $(document.body).on("hidden.bs.modal", "#crud", function() {
-            //     $("#crud-result").html('');
-            // });
+            $(document.body).on("hidden.bs.modal", "#crud", function() {
+                $("#crud-result").html('');
+            });
 
             $(document.body).on("hidden.bs.modal", "#factor-modal", function() {
                 $("#factor-result").html('');
