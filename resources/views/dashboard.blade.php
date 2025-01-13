@@ -563,6 +563,7 @@
                 success: function(response) {
                     console.log(response);
                     if (response.isActive) {
+                        console.log($('#crud-game').prop('disabled'));
                         $('#crud-game').prop('disabled', false);
                     } else {
                         $('#crud-game').prop('disabled', true);
