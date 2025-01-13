@@ -558,6 +558,8 @@ Route::middleware(['auth', 'store-request', 'check-charge', 'visit-log'])->group
     //Offline toggle - License
     // Route::post('/offline/toggle', [OfflineController::class, 'toggle'])->name('offlineToggle');
     Route::get('/license-show', [OfflineController::class, 'licenseShow'])->name('licenseShow');
+    Route::get('/check-license', [OfflineController::class, 'checkLicenseStatus'])->name('checkLicense');
+
 });
 
 Route::get('/transfer', function () {

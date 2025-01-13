@@ -41,4 +41,13 @@ class OfflineController extends Controller
         $license = new License();
         return $license->showLicense();
     }
+
+    public function checkLicenseStatus()
+    {
+        $isActive = License::licenseActivate();
+
+        return response()->json([
+            'isActive' => $isActive,
+        ]);
+    }
 }

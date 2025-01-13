@@ -85,9 +85,9 @@
                             <div class="row">
                                 <div class="col mx-2 my-2">
                                     <button class="btn btn-success btn-lg w-100" id="crud-game" data-bs-toggle="modal"
-                                        data-bs-target="#crud">
+                                        data-bs-target="#crud" disabled>
                                         <i class="bx bx-log-in"></i>
-                                        <span>&nbsp{{ __('messages.entrance') }}&nbsp</span>
+                                        <span>&nbsp;{{ __('messages.entrance') }}&nbsp;</span>
                                     </button>
                                 </div>
                                 <div class="col mx-2 my-2">
