@@ -557,18 +557,36 @@
 
         $(document).ready(function() {
 
+            $.ajax({
+                url: "{{ route('checkLicense') }}",
+                type: "GET",
+                success: function(response) {
+                    if (response.isActive) {
+                        $('#crud-game').prop('disabled', false);
+                    } else {
+                        $('#crud-game').prop('disabled', true);
 
+                        $('#crud-game').on('click', function(e) {
+                            e.preventDefault();
+                            Swal.fire({
+                                title: 'خطا',
+                                text: 'در حالتی که آفلاین فعال باشد امکان ثبت ورود وجود ندارد.',
+                                icon: 'warning',
+                                confirmButtonText: 'باشه'
+                            });
+                        });
+                    }
+                },
+                error: function() {
+                    console.error("مشکلی در بررسی وضعیت لایسنس به وجود آمد.");
+                }
+            });
+            
             $(document.body).on("click", "#print-bill", function() {
                 let id = $(this).data('id');
                 let printTab = window.open('/print/' + id, '_blank');
             });
             makeTable();
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
 
             $(document.body).on("click", "#crud-game", function() {
                 $("#loading").fadeIn();
