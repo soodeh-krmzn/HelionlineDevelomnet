@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('group_id');
             $table->string('permission');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
