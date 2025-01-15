@@ -5,18 +5,19 @@ namespace App\Models;
 use App\Models\MyModels\Main;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Syncable;
 
 class Offer extends Main
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Syncable;
 
     protected $fillable = ['id', 'name', 'type', 'per', 'min_price', 'calc', 'details', 'times_used'];
 
     public function showIndex()
     {
         $offers = Offer::orderBy('name', 'desc')->get();
-        if($offers->count() > 0) {
-            ?>
+        if ($offers->count() > 0) {
+?>
             <table id="offer-table" class="table table-hover border-top">
                 <thead>
                     <tr>
@@ -30,37 +31,37 @@ class Offer extends Main
                     </tr>
                 </thead>
                 <tbody>
-                <?php
-                $i = 1;
-                foreach ($offers as $offer) { ?>
-                    <tr>
-                        <td><?php echo $i; ?></td>
-                        <td><?php echo $offer->name; ?></td>
-                        <td><?php echo $offer->type; ?></td>
-                        <td><?php echo cnf($offer->per); ?></td>
-                        <td><?php echo cnf($offer->min_price);?></td>
-                        <td><?php echo $offer->details; ?></td>
-                        <td>
-                            <button type="button" class="btn btn-warning btn-sm crud" data-action="update" data-id="<?php echo $offer->id; ?>" data-bs-target="#crud" data-bs-toggle="modal">
-                                <i class="bx bx-edit"></i>
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm delete-offer" data-id="<?php echo $offer->id; ?>"><i class="bx bx-trash"></i></button>
-                        </td>
-                    </tr>
                     <?php
-                    $i++;
-                }
-                ?>
+                    $i = 1;
+                    foreach ($offers as $offer) { ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>
+                            <td><?php echo $offer->name; ?></td>
+                            <td><?php echo $offer->type; ?></td>
+                            <td><?php echo cnf($offer->per); ?></td>
+                            <td><?php echo cnf($offer->min_price); ?></td>
+                            <td><?php echo $offer->details; ?></td>
+                            <td>
+                                <button type="button" class="btn btn-warning btn-sm crud" data-action="update" data-id="<?php echo $offer->id; ?>" data-bs-target="#crud" data-bs-toggle="modal">
+                                    <i class="bx bx-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm delete-offer" data-id="<?php echo $offer->id; ?>"><i class="bx bx-trash"></i></button>
+                            </td>
+                        </tr>
+                    <?php
+                        $i++;
+                    }
+                    ?>
                 </tbody>
             </table>
-            <?php
+        <?php
         } else { ?>
             <div class="row">
                 <div class="col-12">
                     <div class="alert alert-danger text-center m-0"><?php echo __('موردی جهت نمایش موجود نیست.'); ?></div>
                 </div>
             </div>
-            <?php
+        <?php
         }
     }
 
@@ -74,7 +75,6 @@ class Offer extends Main
             $min_price = "";
             $calc = "";
             $details = "";
-
         } else if ($action == "update") {
             $title = __('ویرایش کد تخفیف');
             $offer = Offer::find($id);
@@ -100,8 +100,8 @@ class Offer extends Main
                 <div class="col-md-6 form-group">
                     <label class="form-label required"><?php echo __('نوع تخفیف'); ?> <span class="text-danger">*</span></label>
                     <select name="type" id="type" data-id="type" class="form-select checkEmpty">
-                        <option value="درصد" <?php echo $type == "درصد" ? 'selected': '' ?>><?php echo __('درصد'); ?></option>
-                        <option value="مبلغ" <?php echo $type == "مبلغ" ? 'selected': '' ?>><?php echo __('مبلغ'); ?></option>
+                        <option value="درصد" <?php echo $type == "درصد" ? 'selected' : '' ?>><?php echo __('درصد'); ?></option>
+                        <option value="مبلغ" <?php echo $type == "مبلغ" ? 'selected' : '' ?>><?php echo __('مبلغ'); ?></option>
                     </select>
                     <div class="invalid-feedback" data-id="type" data-error="checkEmpty"></div>
                 </div>
@@ -114,10 +114,10 @@ class Offer extends Main
                     <div class="invalid-feedback" data-id="per" data-error="checkEmpty"></div>
                 </div>
                 <div class="col-md-6 form-group">
-                     <label class="form-label required"><?php echo __('حداقل مبلغ'); ?> <span class="text-danger">*</span></label>
-                     <input type="text" name="min_price" data-id="min-price" class="form-control just-numbers money-filter checkEmpty" placeholder="<?php echo __('حداقل مبلغ'); ?>..." value="<?php echo ($min_price != "" ? cnf($min_price) : ""); ?>" onkeypress="return onlyNumberKey(event)">
-                     <input type="hidden" name="min_price" id="min-price" data-id="min-price" class="form-control just-numbers checkEmpty" placeholder="<?php echo __('حداقل مبلغ'); ?>..." value="<?php echo $min_price ?>">
-                     <div class="invalid-feedback" data-id="min-price" data-error="checkEmpty"></div>
+                    <label class="form-label required"><?php echo __('حداقل مبلغ'); ?> <span class="text-danger">*</span></label>
+                    <input type="text" name="min_price" data-id="min-price" class="form-control just-numbers money-filter checkEmpty" placeholder="<?php echo __('حداقل مبلغ'); ?>..." value="<?php echo ($min_price != "" ? cnf($min_price) : ""); ?>" onkeypress="return onlyNumberKey(event)">
+                    <input type="hidden" name="min_price" id="min-price" data-id="min-price" class="form-control just-numbers checkEmpty" placeholder="<?php echo __('حداقل مبلغ'); ?>..." value="<?php echo $min_price ?>">
+                    <div class="invalid-feedback" data-id="min-price" data-error="checkEmpty"></div>
                 </div>
             </div>
             <div class="row mb-4">
@@ -141,17 +141,17 @@ class Offer extends Main
                     <?php
                     if ($action == "create") { ?>
                         <button type="button" id="store-offer" data-action="create" data-id="0" class="btn btn-success me-sm-3 me-1 submit-by-enter"><?php echo __('ثبت اطلاعات'); ?></button>
-                        <?php
-                    } else if($action == "update") {
-                        ?>
+                    <?php
+                    } else if ($action == "update") {
+                    ?>
                         <button type="button" id="store-offer" data-action="update" data-id="<?php echo $id; ?>" class="btn btn-warning me-sm-3 me-1 submit-by-enter"><?php echo __('ویرایش اطلاعات'); ?></button>
-                        <?php
+                    <?php
                     } ?>
                     <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close"><?php echo __('انصراف'); ?></button>
                 </div>
             </div>
         </div>
-        <?php
+    <?php
     }
 
     public function crudGame($g_id)
@@ -166,7 +166,7 @@ class Offer extends Main
         $offer_price = $game->offer_price;
         $offer_calc = $game->offer_calc;
         $offers = Offer::all();
-        ?>
+    ?>
         <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
         <div class="modal-body">
             <div class="text-center mb-4 mt-0 mt-md-n2">
@@ -186,9 +186,9 @@ class Offer extends Main
                         <option value="0"><?php echo __('هیچکدام'); ?></option>
                         <?php
                         foreach ($offers as $offer) {
-                            ?>
+                        ?>
                             <option value="<?php echo $offer->id ?>" <?php echo $offer->id == $offer_code ? "selected" : "" ?>><?php echo $offer->name ?></option>
-                            <?php
+                        <?php
                         }
                         ?>
                     </select>
@@ -215,7 +215,6 @@ class Offer extends Main
                 </div>
             </div>
         </div>
-        <?php
+<?php
     }
-
 }
