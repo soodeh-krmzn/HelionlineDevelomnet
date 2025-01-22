@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Models\MyModels\Main;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Syncable;
 
 class Wallet extends Main
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Syncable;
 
     protected $fillable = ['person_id', 'balance', 'price', 'gift_percent', 'final_price', 'description', 'expire'];
 
