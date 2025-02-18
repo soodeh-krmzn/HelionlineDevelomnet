@@ -45,7 +45,7 @@ class Database
         DB::purge('mysql');
         Config::set('database.connections.mysql', [
             'driver' => 'mysql',
-            'host' => env('DB_HOST'),
+            'host' => '45.159.150.75',
             'database' => $decrypted['name'],
             'username' => $decrypted['user'],
             'password' => $decrypted['pass'],
